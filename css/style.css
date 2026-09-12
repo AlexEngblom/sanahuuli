@@ -1,0 +1,245 @@
+:root {
+  --bg: #0d0d12;
+  --fg: #f2f2f5;
+  --muted: #b9b9c3;
+  --tile: #9aa2f5;
+  --tile-fg: #11121a;
+  --tile-used: #3a3d46;
+  --box-border: #3f424d;
+  --accent: #9aa2f5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+}
+
+.brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem 2rem;
+}
+
+.instruction {
+  margin: 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+.message {
+  margin: 0;
+  min-height: 1.5em;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+}
+
+/* Word pyramid */
+
+.pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.row {
+  display: flex;
+  gap: 5px;
+}
+
+.box {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fg);
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 0;
+}
+
+.box.filled {
+  background: var(--tile);
+  border-color: var(--tile);
+  color: var(--tile-fg);
+}
+
+.box.editable {
+  cursor: pointer;
+}
+
+.box.cursor {
+  border-color: var(--accent);
+}
+
+/* Letter bank */
+
+.bank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 20rem;
+}
+
+.tile {
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 10px;
+  background: var(--tile);
+  color: var(--tile-fg);
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tile:disabled {
+  background: var(--tile-used);
+  color: var(--muted);
+  cursor: default;
+}
+
+/* Controls */
+
+.controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pill {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--fg);
+  border-radius: 999px;
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Chain list page */
+
+.chain-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 28rem;
+}
+
+.chain-link {
+  display: block;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--box-border);
+  border-radius: 12px;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.chain-link:hover {
+  border-color: var(--accent);
+}
+
+.chain-name {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.chain-description {
+  color: var(--muted);
+}
+
+/* Rules dialog & errors */
+
+dialog {
+  background: #17171f;
+  color: var(--fg);
+  border: 1px solid var(--box-border);
+  border-radius: 12px;
+  max-width: min(32rem, 90vw);
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+dialog h2 {
+  margin-top: 0;
+}
+
+dialog form {
+  text-align: right;
+}
+
+.error-box {
+  text-align: center;
+}
+
+.error-box a {
+  color: var(--accent);
+}
+
+/* Narrow phones: shrink boxes so the widest row always fits */
+
+@media (max-width: 400px) {
+  .box {
+    width: 34px;
+    height: 34px;
+    font-size: 1.1rem;
+  }
+
+  .row {
+    gap: 4px;
+  }
+}

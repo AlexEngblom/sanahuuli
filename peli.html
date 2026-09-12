@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sanahuuli</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="game">
+  <header class="topbar">
+    <a class="brand" href="index.html">Sanahuuli</a>
+    <button id="info-button" class="icon-button" type="button" aria-label="Ohjeet">ⓘ</button>
+  </header>
+
+  <main id="game-root">
+    <p class="instruction">Käytä kaikki edellisen sanan kirjaimet ja yksi uusi</p>
+    <p id="message" class="message" role="status"></p>
+    <div id="pyramid" class="pyramid"></div>
+    <div id="bank" class="bank"></div>
+    <div class="controls">
+      <button id="give-up" class="pill" type="button">Lopeta</button>
+      <button id="clear" class="pill" type="button" aria-label="Tyhjennä rivi">✕</button>
+      <button id="shuffle" class="pill" type="button" aria-label="Sekoita kirjaimet">↻</button>
+      <button id="play-again" class="pill" type="button" hidden>Pelaa uudelleen</button>
+    </div>
+  </main>
+
+  <dialog id="rules-dialog">
+    <h2>Näin pelaat</h2>
+    <ul>
+      <li>Tavoitteesi on muodostaa sanoja, jotka kasvavat kirjaimella pidemmiksi joka rivillä.</li>
+      <li>Näet pelin alussa ensimmäisen sanan ja kaikki käytettävissä olevat kirjaimet.</li>
+      <li>Muodosta seuraava sana käyttämällä <strong>kaikki edellisen sanan kirjaimet ja yksi uusi kirjain</strong>.</li>
+      <li>Anagrammi kelpaa: jos edellinen sana on ILO ja lisättävä kirjain K, kelpaavat sekä OLKI että KILO.</li>
+      <li>Vain tietty kirjain vie eteenpäin — muut yritykset eivät etene.</li>
+      <li>Peli päättyy, kun muodostat viimeisen sanan tai painat Lopeta.</li>
+    </ul>
+    <form method="dialog">
+      <button class="pill" type="submit">Sulje</button>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
