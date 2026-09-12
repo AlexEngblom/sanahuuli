@@ -59,17 +59,18 @@ export function renderGame(refs, model) {
 
 function renderPyramid(pyramid, { state, inputLetters }) {
   const playing = state.status === 'playing';
+  const inputRow = state.index + 1;
   const rows = state.words.map((word, rowIndex) => {
     const row = document.createElement('div');
     row.className = 'row';
 
-    // Finished game reveals every row; otherwise rows above the current
-    // one are filled, the current row shows the in-progress input and
-    // future rows stay empty.
+    // Solved rows (including the revealed starting word) are filled, the
+    // next row shows the in-progress input, future rows stay empty.
+    // A finished game reveals every row.
     let letters = [];
-    if (!playing || rowIndex < state.index) {
+    if (!playing || rowIndex <= state.index) {
       letters = [...word];
-    } else if (rowIndex === state.index) {
+    } else if (rowIndex === inputRow) {
       letters = inputLetters;
     }
 
@@ -83,7 +84,7 @@ function renderPyramid(pyramid, { state, inputLetters }) {
         box.textContent = letter;
         box.classList.add('filled');
       }
-      if (playing && rowIndex === state.index) {
+      if (playing && rowIndex === inputRow) {
         if (i < inputLetters.length) {
           box.dataset.inputIndex = String(i);
           box.classList.add('editable');
