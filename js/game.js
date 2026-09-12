@@ -74,6 +74,7 @@ export function remainingAddedLetters(state) {
 
 // Letter bank shown to the player: current word's letters (type 'root')
 // + the remaining added letters (type 'extra'). Size stays constant.
+// The type lets the UI color untouched root letters like locked-in words.
 export function letterBank(state) {
   const root = [...currentWord(state)].map((letter) => ({ letter, type: 'root' }));
   const extra = remainingAddedLetters(state).map((letter) => ({ letter, type: 'extra' }));

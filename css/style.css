@@ -4,10 +4,10 @@
   --muted: #b9b9c3;
   --tile: #9aa2f5;
   --tile-fg: #11121a;
-  --tile-root: #2a2c34;
-  --tile-root-fg: #9a9caa;
   --tile-used: #3a3d46;
   --box-border: #3f424d;
+  --pending: #4f6df5;
+  --pending-fg: #ffffff;
   --accent: #9aa2f5;
 }
 
@@ -106,6 +106,14 @@ main {
   color: var(--tile-fg);
 }
 
+/* Letters placed on the in-progress row: white border + white letter,
+   no fill — clearly different from the lilac locked rows. */
+.box.pending {
+  background: transparent;
+  border-color: var(--fg);
+  color: var(--fg);
+}
+
 .box.editable {
   cursor: pointer;
 }
@@ -124,28 +132,30 @@ main {
   max-width: 20rem;
 }
 
+/* Default tile: untouched extra letter (grey). */
 .tile {
   width: 52px;
   height: 52px;
   border: none;
   border-radius: 10px;
-  background: var(--tile);
-  color: var(--tile-fg);
+  background: var(--tile-used);
+  color: var(--muted);
   font-size: 1.5rem;
   font-weight: 700;
   cursor: pointer;
 }
 
-/* Letters already in the current word look like HS's dark "always
-   available" tiles; only extra (new) letters are bright. */
+/* Untouched root letter: lilac, like the locked-in words on the board. */
 .tile.root {
-  background: var(--tile-root);
-  color: var(--tile-root-fg);
+  background: var(--tile);
+  color: var(--tile-fg);
 }
 
-.tile:disabled {
-  background: var(--tile-used);
-  color: var(--muted);
+/* Letter placed on the in-progress row: blue highlight, whether the
+   letter came from the root word or was a fresh extra letter. */
+.tile.picked {
+  background: var(--pending);
+  color: var(--pending-fg);
   cursor: default;
 }
 

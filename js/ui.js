@@ -82,7 +82,9 @@ function renderPyramid(pyramid, { state, inputLetters }) {
       const letter = letters[i];
       if (letter) {
         box.textContent = letter;
-        box.classList.add('filled');
+        // In-progress input is highlighted differently from locked rows.
+        const isInput = playing && rowIndex === inputRow;
+        box.classList.add(isInput ? 'pending' : 'filled');
       }
       if (playing && rowIndex === inputRow) {
         if (i < inputLetters.length) {
@@ -102,17 +104,17 @@ function renderPyramid(pyramid, { state, inputLetters }) {
 function renderBank(bank, { tiles, order, input, state }) {
   const playing = state.status === 'playing';
   const used = new Set(input);
-  // Root letters first, then extra letters — each group in its own shuffled
-  // order, so root and extra tiles never interleave visually.
-  const grouped = [
-    ...order.filter((id) => tiles[id].type === 'root'),
-    ...order.filter((id) => tiles[id].type === 'extra'),
-  ];
-  const buttons = grouped.map((tileId) => {
+  const buttons = order.map((tileId) => {
     const tile = tiles[tileId];
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = tile.type === 'root' ? 'tile root' : 'tile';
+    // Picked tiles get the blue highlight; untouched root letters are
+    // lilac like locked-in words; untouched extra letters stay grey.
+    if (used.has(tileId)) {
+      button.className = 'tile picked';
+    } else {
+      button.className = tile.type === 'root' ? 'tile root' : 'tile';
+    }
     button.textContent = tile.letter;
     button.dataset.tileId = String(tileId);
     button.disabled = !playing || used.has(tileId);
