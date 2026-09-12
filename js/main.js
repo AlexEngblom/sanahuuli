@@ -108,8 +108,12 @@ async function initGamePage() {
       message = '';
       rebuildBank();
     } else if (result === 'rejected') {
-      message = 'Ei etene — kokeile toista kirjainyhdistelmää.';
-      // HS-malli: hylätty sana tyhjentää rivin automaattisesti.
+      // HS-malli: erottele "puuttuvat kirjaimet" ja "väärä sana".
+      const prev = state.words[state.index];
+      const missing = [...prev].filter((l) => !word.includes(l));
+      message = missing.length > 0
+        ? `Sinun täytyy käyttää kaikki samat kirjaimet kuin edellisessä sanassa: ${missing.join(', ')}`
+        : 'Ei etene — kokeile toista kirjainyhdistelmää.';
       input = [];
     }
     render();
