@@ -1,0 +1,114 @@
+// Pure game logic for Sanahuuli. No DOM access — unit-testable in Node.
+
+export function normalizeWord(word) {
+  return word.trim().toUpperCase();
+}
+
+export function letterCounts(word) {
+  const counts = new Map();
+  for (const letter of word) {
+    counts.set(letter, (counts.get(letter) ?? 0) + 1);
+  }
+  return counts;
+}
+
+export function isAnagram(a, b) {
+  if (a.length !== b.length) return false;
+  const remaining = letterCounts(a);
+  for (const letter of b) {
+    const left = remaining.get(letter) ?? 0;
+    if (left === 0) return false;
+    remaining.set(letter, left - 1);
+  }
+  return true;
+}
+
+// The letter that turns `previous` into an anagram of `next`, or null if
+// `next` is not exactly `previous` plus one letter.
+export function addedLetter(previous, next) {
+  if (next.length !== previous.length + 1) return null;
+  const remaining = letterCounts(previous);
+  for (const letter of next) {
+    const left = remaining.get(letter) ?? 0;
+    if (left === 0) return letter;
+    remaining.set(letter, left - 1);
+  }
+  return null;
+}
+
+// Validates a word chain and returns normalized words + the added letter
+// of each step. Throws on any invalid step — chain data is curated, so a
+// broken chain is a bug we want to fail fast on.
+export function validateChain(words) {
+  if (!Array.isArray(words) || words.length < 2) {
+    throw new Error('A chain needs at least two words');
+  }
+  const normalized = words.map(normalizeWord);
+  const addedLetters = [];
+  for (let i = 1; i < normalized.length; i++) {
+    const previous = normalized[i - 1];
+    const next = normalized[i];
+    const letter = addedLetter(previous, next);
+    if (letter === null || !isAnagram(previous + letter, next)) {
+      throw new Error(
+        `Invalid chain step ${i}: "${next}" is not "${previous}" plus one letter`,
+      );
+    }
+    addedLetters.push(letter);
+  }
+  return { words: normalized, addedLetters };
+}
+
+export function createGame(chain) {
+  const { words, addedLetters } = validateChain(chain.words);
+  return { words, addedLetters, index: 0, status: 'playing' };
+}
+
+export function currentWord(state) {
+  return state.words[state.index];
+}
+
+export function remainingAddedLetters(state) {
+  return state.addedLetters.slice(state.index);
+}
+
+// Letter bank shown to the player: current word's letters + the remaining
+// added letters. Its size stays constant throughout the game.
+export function letterBank(state) {
+  return [...currentWord(state), ...remainingAddedLetters(state)];
+}
+
+// Attempt to advance with `input`. Returns { result } where result is
+// 'advanced' | 'won' | 'rejected' | 'empty' | 'inactive'.
+export function submitWord(state, input) {
+  if (state.status !== 'playing') return { result: 'inactive' };
+  const word = normalizeWord(input);
+  if (word.length === 0) return { result: 'empty' };
+  const target = state.words[state.index + 1];
+  if (!isAnagram(word, target)) return { result: 'rejected' };
+  state.index += 1;
+  if (state.index === state.words.length - 1) {
+    state.status = 'won';
+    return { result: 'won' };
+  }
+  return { result: 'advanced' };
+}
+
+export function giveUp(state) {
+  if (state.status !== 'playing') return { result: 'inactive' };
+  state.status = 'given-up';
+  return { result: 'given-up' };
+}
+
+// Restores saved localStorage progress into a fresh game state.
+export function applyProgress(state, progress) {
+  const index = Math.min(
+    Math.max(0, Number(progress?.index) || 0),
+    state.words.length - 1,
+  );
+  state.index = index;
+  if (progress?.status === 'won' || progress?.status === 'given-up') {
+    state.status = progress.status;
+  }
+  return state;
+}
