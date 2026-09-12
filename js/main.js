@@ -108,11 +108,11 @@ async function initGamePage() {
       message = '';
       rebuildBank();
     } else if (result === 'rejected') {
-      // HS-malli: erottele "puuttuvat kirjaimet" ja "väärä sana".
+      // Erottele "puuttuvat kirjaimet" ja "väärä sana".
       const prev = state.words[state.index];
       const missing = [...prev].filter((l) => !word.includes(l));
       message = missing.length > 0
-        ? `Sinun täytyy käyttää kaikki samat kirjaimet kuin edellisessä sanassa: ${missing.join(', ')}`
+        ? `Sinun täytyy käyttää kaikki samat kirjaimet kuin edellisessä sanassa`
         : 'Ei etene — kokeile toista kirjainyhdistelmää.';
       input = [];
     }
@@ -133,7 +133,7 @@ async function initGamePage() {
     if (!button || button.disabled) return;
     input.push(Number(button.dataset.tileId));
     message = '';
-    // HS-style: the word submits automatically once the row is full.
+    // The word submits automatically once the row is full.
     if (input.length === state.words[state.index + 1].length) {
       submit();
     } else {
