@@ -23,9 +23,10 @@ peli.html                   # Pelisivu (lukee ?juuri=<id>, lataa data/chains/<id
 css/
   style.css                 # Mobiilifirst-tyylit
 js/
-  game.js                   # Puhdas pelilogiikka — ei DOMia. Kirjainpooli, anagrammitarkistus, siirtovalidointi, pelitila
+  game.js                   # Puhdas pelilogiikka — ei DOMia. Kirjainpankki, anagrammitarkistus, siirtovalidointi, pelitila
   chains.js                 # Ketjujen haku ja normalisointi (uppercase, ääkköset säilyvät)
-  ui.js                     # DOM-renderöinti (kirjainlaatat, palaute, voittoruutu)
+  storage.js                # Pelitilan tallennus localStorageen (eteneminen ei häviä sivun päivityksessä)
+  ui.js                     # DOM-renderöinti (pyramidi, kirjainpankki, palaute, voittoruutu)
   main.js                   # Tapahtumien kytkentä, sivun käynnistys
 data/
   chains/
@@ -56,10 +57,16 @@ Ketjutiedosto (`data/chains/<id>.json`):
 
 ## Pelilogiikan ydin (`js/game.js`)
 
-- Latauksen yhteydessä "oikea" lisäkirjain per siirtymä johdetaan ketjusta (seuraavan sanan kirjaimet miinus edellisen sanan kirjaimet). Pelaajalle näytettävä **kirjainpooli** on kaikkien ketjun lisäkirjainten joukko.
+- Latauksen yhteydessä "oikea" lisäkirjain per siirtymä johdetaan ketjusta (seuraavan sanan kirjaimet miinus edellisen sanan kirjaimet). Pelaajalle näytettävä **kirjainpankki** on nykyisen sanan kirjaimet + jäljellä olevat lisäkirjaimet — pankin koko pysyy vakiona koko pelin ajan (HS:n Sanajuuren tyyliin).
 - **Siirron validointi:** syötteen täytyy koostua täsmälleen edellisen sanan kirjaimista plus yhdestä uudesta kirjaimesta. Eteneminen edellyttää, että syöte vastaa ketjun seuraavaa sanaa **anagrammina** (sama kirjainjoukko, ei välttämättä sama merkkijono).
 - **Pelitila:** nykyinen indeksi, tila (`playing` / `won` / `given-up`). Lopetus paljastaa ketjun loput sanat.
 - Kaikki logiikka on puhdasta ja DOM-vapaata, jotta se on yksikkötestattavissa Nodessa.
+
+## Tilan säilyvyys (localStorage)
+
+- Pelin eteneminen tallennetaan selaimen localStorageen avaimella `sanahuuli:progress:<chainId>` (`{ index, status }`).
+- Tila palautetaan latautuessa, jotta peli ei häviä vahingossa (esim. sivun päivitys).
+- "Pelaa uudelleen" tyhjentää tallennetun tilan. Ei synkronointia laitteiden välillä (ei backendia).
 
 ## Testaus
 

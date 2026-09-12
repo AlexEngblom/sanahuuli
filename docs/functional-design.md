@@ -18,14 +18,27 @@ Yksinkertainen sanapeli polttariviikonloppuun: pelaajat muodostavat sanoja, jotk
 - Puuttuva/tuntematon ketju-id → ystävällinen virheviesti ja linkki takaisin listaukseen.
 
 **Pelatessa:**
-- Pelaaja muodostaa seuraavan sanan klikattavilla kirjainlaatoilla (edellisen sanan kirjaimet + poolin kirjaimet) ja/tai fyysisellä näppäimistöllä.
+- Ketju näytetään pyramidina: täydennetyt rivit ylhäällä, nykyinen rivi aktiivisena, tulevat rivit tyhjinä laatikoina.
+- Pelaaja muodostaa seuraavan sanan klikkaamalla **kirjainpankin** laattoja (nykyisen sanan kirjaimet + jäljellä olevat uudet kirjaimet) ja/tai fyysisellä näppäimistöllä.
+- Laatat menevät nykyiselle riville järjestyksessä; rivin laatikkoa klikkaamalla tai Backspacella kirjaimen voi poistaa. **✕** tyhjentää rivin, **↻** sekoittaa pankin.
 - Sanan lähettäminen:
   - Oikea seuraava sana tai sen anagrammi → etene seuraavalle riville.
   - Kaikki muu → lempeä "ei etene" -palaute; yrittäminen on vapaata (ei elämiä, ei pisteitä).
 - **Lopeta**-nappi: paljastaa ketjun loput sanat.
+- **ⓘ-nappi** yläkulmassa avaa ohjeet modaalina.
 
 **Voitto:**
 - Viimeisen sanan muodostaminen näyttää voittoruudun ja koko valmiin ketjun.
+
+## Visuaalinen suunta
+
+- Tumma teema ja HS:n Sanajuurta mukaileva asettelu: sanapyramidi keskellä, kirjainpankki alla, toiminnot pohjassa, ohjeet ⓘ-napin takana.
+- UX tarkennetaan myöhemmin pelikokemuksen perusteella.
+
+## Tilan säilyvyys
+
+- Pelin eteneminen tallentuu automaattisesti localStorageen — sivun saa päivittää tai sulkea kesken pelin.
+- Voiton tai lopetuksen jälkeen voi aloittaa alusta ("Pelaa uudelleen").
 
 ## Interaktiovaatimukset
 
