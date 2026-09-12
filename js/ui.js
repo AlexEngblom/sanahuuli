@@ -54,8 +54,6 @@ export function renderGame(refs, model) {
     refs.message.textContent = 'Peli lopetettu — tässä koko ketju.';
   } else if (model.message) {
     refs.message.textContent = model.message;
-  } else {
-    refs.message.textContent = 'Käytä kaikki edellisen sanan kirjaimet ja yksi uusi';
   }
 }
 

@@ -50,6 +50,7 @@ async function initGamePage() {
     giveUp: document.getElementById('give-up'),
     clear: document.getElementById('clear'),
     shuffle: document.getElementById('shuffle'),
+    hint: document.getElementById('hint'),
     playAgain: document.getElementById('play-again'),
     infoButton: document.getElementById('info-button'),
     dialog: document.getElementById('rules-dialog'),
@@ -161,6 +162,11 @@ async function initGamePage() {
   });
 
   refs.playAgain.addEventListener('click', reset);
+
+  refs.hint.addEventListener('click', () => {
+    message = 'Mikä on kun ei taidot riitä?';
+    render();
+  });
 
   document.addEventListener('keydown', (event) => {
     if (refs.dialog.open || state.status !== 'playing') return;
