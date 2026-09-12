@@ -102,11 +102,17 @@ function renderPyramid(pyramid, { state, inputLetters }) {
 function renderBank(bank, { tiles, order, input, state }) {
   const playing = state.status === 'playing';
   const used = new Set(input);
-  const buttons = order.map((tileId) => {
+  // Root letters first, then extra letters — each group in its own shuffled
+  // order, so root and extra tiles never interleave visually.
+  const grouped = [
+    ...order.filter((id) => tiles[id].type === 'root'),
+    ...order.filter((id) => tiles[id].type === 'extra'),
+  ];
+  const buttons = grouped.map((tileId) => {
     const tile = tiles[tileId];
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'tile';
+    button.className = tile.type === 'root' ? 'tile root' : 'tile';
     button.textContent = tile.letter;
     button.dataset.tileId = String(tileId);
     button.disabled = !playing || used.has(tileId);

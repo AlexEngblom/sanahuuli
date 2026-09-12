@@ -82,7 +82,7 @@ async function initGamePage() {
   let message = '';
 
   function rebuildBank() {
-    tiles = letterBank(state).map((letter, id) => ({ id, letter }));
+    tiles = letterBank(state).map((tile, id) => ({ id, ...tile }));
     order = shuffled(tiles.map((tile) => tile.id));
     input = [];
   }

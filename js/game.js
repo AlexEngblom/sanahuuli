@@ -72,10 +72,12 @@ export function remainingAddedLetters(state) {
   return state.addedLetters.slice(state.index);
 }
 
-// Letter bank shown to the player: current word's letters + the remaining
-// added letters. Its size stays constant throughout the game.
+// Letter bank shown to the player: current word's letters (type 'root')
+// + the remaining added letters (type 'extra'). Size stays constant.
 export function letterBank(state) {
-  return [...currentWord(state), ...remainingAddedLetters(state)];
+  const root = [...currentWord(state)].map((letter) => ({ letter, type: 'root' }));
+  const extra = remainingAddedLetters(state).map((letter) => ({ letter, type: 'extra' }));
+  return [...root, ...extra];
 }
 
 // Attempt to advance with `input`. Returns { result } where result is

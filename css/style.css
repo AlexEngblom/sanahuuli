@@ -4,6 +4,8 @@
   --muted: #b9b9c3;
   --tile: #9aa2f5;
   --tile-fg: #11121a;
+  --tile-root: #2a2c34;
+  --tile-root-fg: #9a9caa;
   --tile-used: #3a3d46;
   --box-border: #3f424d;
   --accent: #9aa2f5;
@@ -132,6 +134,13 @@ main {
   font-size: 1.5rem;
   font-weight: 700;
   cursor: pointer;
+}
+
+/* Letters already in the current word look like HS's dark "always
+   available" tiles; only extra (new) letters are bright. */
+.tile.root {
+  background: var(--tile-root);
+  color: var(--tile-root-fg);
 }
 
 .tile:disabled {

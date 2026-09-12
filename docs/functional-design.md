@@ -19,7 +19,7 @@ Yksinkertainen sanapeli polttariviikonloppuun: pelaajat muodostavat sanoja, jotk
 
 **Pelatessa:**
 - Ketju näytetään pyramidina: täydennetyt rivit ylhäällä, nykyinen rivi aktiivisena, tulevat rivit tyhjinä laatikoina.
-- Pelaaja muodostaa seuraavan sanan klikkaamalla **kirjainpankin** laattoja (nykyisen sanan kirjaimet + jäljellä olevat uudet kirjaimet) ja/tai fyysisellä näppäimistöllä.
+- Pelaaja muodostaa seuraavan sanan klikkaamalla **kirjainpankin** laattoja (nykyisen sanan kirjaimet + jäljellä olevat uudet kirjaimet) ja/tai fyysisellä näppäimistöllä. Nykyisen sanan kirjaimet näytetään tummina laattoina ja vielä käyttämättömät uudet kirjaimet kirkkaina — näin pelaaja hahmottaa, mikä kirjain vie eteenpäin.
 - Laatat menevät nykyiselle riville järjestyksessä; rivin laatikkoa klikkaamalla tai Backspacella kirjaimen voi poistaa. **✕** tyhjentää rivin, **↻** sekoittaa pankin.
 - Sanan lähettäminen:
   - Oikea seuraava sana tai sen anagrammi → etene seuraavalle riville.
