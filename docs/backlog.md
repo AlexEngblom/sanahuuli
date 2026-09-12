@@ -15,3 +15,6 @@
 
 7. Koodissa on suomea ja englantia sekaisin ainakin kommenteissa. Pidetään englantina.
 
+8. Pelilistaus sivun ei ehkä pitäisi olla keskittynyt alas vaan saisi viedä koko sivun.
+
+9. Pitäisiköhän koko paska konvertoida nyt kuitenkin react tms projektiksi?
