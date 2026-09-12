@@ -108,6 +108,8 @@ async function initGamePage() {
       rebuildBank();
     } else if (result === 'rejected') {
       message = 'Ei etene — kokeile toista kirjainyhdistelmää.';
+      // HS-malli: hylätty sana tyhjentää rivin automaattisesti.
+      input = [];
     }
     render();
   }
@@ -126,7 +128,12 @@ async function initGamePage() {
     if (!button || button.disabled) return;
     input.push(Number(button.dataset.tileId));
     message = '';
-    render();
+    // HS-style: the word submits automatically once the row is full.
+    if (input.length === state.words[state.index + 1].length) {
+      submit();
+    } else {
+      render();
+    }
   });
 
   // Click a filled box on the current row to remove that letter.
@@ -170,7 +177,12 @@ async function initGamePage() {
       if (tileId !== undefined) {
         input.push(tileId);
         message = '';
-        render();
+        // HS-style: the word submits automatically once the row is full.
+        if (input.length === state.words[state.index + 1].length) {
+          submit();
+        } else {
+          render();
+        }
       }
     }
   });

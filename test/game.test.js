@@ -89,11 +89,11 @@ test('letter bank = current word + remaining added letters, constant size', () =
   const state = createGame({ words: HUULI_1 });
   const size = letterBank(state).length;
   // AIE + remaining added letters N, M, A, U, M (M appears twice in the chain).
-  assert.deepEqual([...letterBank(state)].sort(), [...'AAEIMMNU'].sort());
+  assert.deepEqual([...letterBank(state).map((t) => t.letter)].sort(), [...'AAEIMMNU'].sort());
   submitWord(state, 'AINE');
   assert.equal(letterBank(state).length, size);
   // AINE + remaining M, A, U, M — bank size stays constant.
-  assert.deepEqual([...letterBank(state)].sort(), [...'AAEIMMNU'].sort());
+  assert.deepEqual([...letterBank(state).map((t) => t.letter)].sort(), [...'AAEIMMNU'].sort());
 });
 
 test('applyProgress restores and clamps saved progress', () => {
