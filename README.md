@@ -2,7 +2,7 @@
 
 Simppeli, GitHub Pages -hostattava sanapeli polttariviikonlopun ajanvietteeksi.
 
-Pelissä arvataan sanoja hauskoilla teemoilla ja vihjeillä — täydellistä viihdettä iltaisin ja väleissä, kun polttariporukka tarvitsee pientä aktiviteettia.
+Pelissä arvataan sanoja hauskoilla teemoilla ja vihjeillä — täydellistä viihdettä iltaisin ja väleissä, kun polttarisankari tarvitsee pientä aktiviteettia.
 
 ## Kehitys
 
