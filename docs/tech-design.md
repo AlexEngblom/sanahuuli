@@ -48,17 +48,20 @@ Ketjutiedosto (`data/chains/<id>.json`):
   "id": "polttarit",
   "name": "Polttarit",
   "words": ["ILO", "OLKI", "KOLAUS"],
+  "alternatives": { "OLKI": ["KILO"] },
   "hints": null
 }
 ```
 
 - `words` — järjestetty ketju; jokaisen sanan on oltava muodostettavissa edellisen sanan kirjaimista plus täsmälleen yksi uusi kirjain. Testit varmentavat tämän.
+- Ketjun sanoiksi eivät alkuperäispelissä kelpaa erisnimet, taivutetut sanat, yhdyssanat eivätkä lyhenteet, ja halventavat sanat on jätetty pois. Tämä on kuratointiohje uutta ketjua lisättäessä — koodi ei valvo sitä, testit tarkistavat vain kirjainrakenteen.
+- `alternatives` (valinnainen) — muut kirjoitusasut jotka kelpaavat ketjun sanan sijasta. Avaimena ketjun sana, arvona lista sen anagrammeja. Tämä korvaa sanastotarkistuksen: koska peli ei voi tietää mikä anagrammi on oikea suomen sana, tieto kuratoidaan dataan. Testit varmentavat että jokainen vaihtoehto on anagrammi siitä sanasta jonka alla se on, ja että sana kuuluu ketjuun.
 - Per-sana metadata (esim. vihjeet) on varattu tulevaa laajennusta varten — formaatin täytyy sietää ylimääräisiä kenttiä.
 
 ## Pelilogiikan ydin (`js/game.js`)
 
 - Latauksen yhteydessä "oikea" lisäkirjain per siirtymä johdetaan ketjusta (seuraavan sanan kirjaimet miinus edellisen sanan kirjaimet). Pelaajalle näytettävä **kirjainpankki** on nykyisen sanan kirjaimet + jäljellä olevat lisäkirjaimet — pankin koko pysyy vakiona koko pelin ajan (HS:n Sanajuuren tyyliin). Nykyisen sanan kirjaimet ja jäljellä olevat lisäkirjaimet renderöidään eri tyylein, jotta pelaaja näkee mikä kirjain vie eteenpäin.
-- **Siirron validointi:** syötteen täytyy koostua täsmälleen edellisen sanan kirjaimista plus yhdestä uudesta kirjaimesta. Eteneminen edellyttää, että syöte vastaa ketjun seuraavaa sanaa **anagrammina** (sama kirjainjoukko, ei välttämättä sama merkkijono).
+- **Siirron validointi:** eteneminen edellyttää, että syöte on ketjun seuraava sana **kirjaimelleen** tai jokin sille kuratoitu `alternatives`-kirjoitusasu (`isAcceptedSpelling`). Pelkän anagrammin hyväksyminen oli bugi: ilman sanastoa peli ei erota sanaa KILO merkityksettömästä OLIKista, joten pelaaja pääsi koko ketjun läpi napauttelemalla kirjaimia missä tahansa järjestyksessä. `isAnagram` on yhä käytössä ketjudatan ja vaihtoehtojen validoinnissa sekä palauteviestin valinnassa.
 - **Pelitila:** nykyinen indeksi, tila (`playing` / `won`). Lopetus ei ole pelitila vaan poistuminen: peli kysyy säilytetäänkö eteneminen ja palaa listaukseen.
 - **Palaute hylätystä siirrosta:** `missingLetters()` vertaa edellisen sanan kirjaimia syötteeseen **lukumäärät huomioiden**, jotta "käytit vain toisen A:sta" tunnistetaan puuttuvaksi kirjaimeksi. Aiempi "sisältyykö kirjain" -tarkistus antoi toistuvilla kirjaimilla väärän viestin.
 - Kaikki logiikka on puhdasta ja DOM-vapaata, jotta se on yksikkötestattavissa Nodessa.
@@ -90,7 +93,7 @@ Nämä kolme ratkaisua eivät ole ilmeisiä koodia lukemalla, ja kaksi ensimmäi
 
 ## Nimenomaisesti pois scopesta
 
-- Sanasto- / oikolukutarkistus
+- Sanasto- / oikolukutarkistus. Korvike on ketjudatan `alternatives`-kenttä.
 - Sanaketjujen generaattori
 - Käyttäjien luomat ketjut (vaatii persistointia — shelvattu; mahdollisia tulevia vaihtoehtoja: JSON leikepöydälle/lataukseen PR:ää varten, tai URL-koodatut ketjut)
 - Oikeat vihjeet, pisteet, ajastin, tunnistautuminen. Käyttöliittymässä on Vihje-nappi, mutta se tulostaa vain vitsirivin.

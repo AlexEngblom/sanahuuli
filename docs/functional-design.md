@@ -23,8 +23,8 @@ Yksinkertainen sanapeli polttariviikonloppuun: pelaajat muodostavat sanoja, jotk
 - Pelaaja muodostaa seuraavan sanan klikkaamalla **kirjainpankin** laattoja (nykyisen sanan kirjaimet + jäljellä olevat uudet kirjaimet) ja/tai fyysisellä näppäimistöllä. Nykyisen sanan kirjaimet näytetään tummina laattoina ja vielä käyttämättömät uudet kirjaimet kirkkaina — näin pelaaja hahmottaa, mikä kirjain vie eteenpäin.
 - Laatat menevät nykyiselle riville järjestyksessä. Kirjaimen voi poistaa kolmella tavalla: klikkaamalla sitä rivin laatikosta, klikkaamalla jo käytettyä laattaa uudelleen kirjainpankissa, tai Backspacella (poistaa viimeisimmän). **✕** tyhjentää rivin, **↻** sekoittaa pankin.
 - Sanan lähettäminen: **sana lähtee automaattisesti, kun rivi täyttyy** — erillistä lähetysnappia ei ole. Enter lähettää myös vajaan rivin.
-  - Oikea seuraava sana tai sen anagrammi → etene seuraavalle riville.
-  - Kaikki muu → lempeä "ei etene" -palaute; yrittäminen on vapaata (ei elämiä, ei pisteitä). Palaute erottelee kaksi tapausta: edellisen sanan kirjaimia jäi käyttämättä (kirjainten lukumäärät huomioiden), vai oliko kyseessä väärä yhdistelmä.
+  - Ketjun seuraava sana kirjaimelleen, tai ketjudataan kuratoitu vaihtoehtoinen kirjoitusasu → etene seuraavalle riville. Oikeat kirjaimet väärässä järjestyksessä eivät riitä.
+  - Kaikki muu → lempeä "ei etene" -palaute; yrittäminen on vapaata (ei elämiä, ei pisteitä). Palaute erottelee kaksi tapausta: edellisen sanan kirjaimia jäi käyttämättä (kirjainten lukumäärät huomioiden), vai eikö syöte muuten etene. Peli ei kerro oliko kirjainvalinta oikea — se paljastaisi puolet vastauksesta.
 - **Lopeta**-nappi: kysyy, haluaako pelaaja palata jatkamaan myöhemmin. Kyllä säilyttää etenemisen, ei tyhjentää sen — molemmissa tapauksissa pelaaja palaa ketjulistaukseen. Ketjua ei koskaan paljasteta.
 - **Vihje**-nappi on käyttöliittymässä, mutta se ei vielä anna oikeaa vihjettä — se tulostaa vitsirivin. Varsinainen vihjetoiminto on yhä pois scopesta.
 - **ⓘ-nappi** yläkulmassa avaa ohjeet modaalina.

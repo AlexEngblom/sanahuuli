@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import {
   missingLetters,
+  normalizeAlternatives,
+  isAcceptedSpelling,
   validateChain,
   createGame,
   submitWord,
@@ -48,12 +50,11 @@ test('isAnagram compares letter multisets', () => {
   assert.ok(!isAnagram('KILO', 'KILOGRAMMI'));
 });
 
-test('full playthrough with anagrams wins the game', () => {
+test('full playthrough wins the game', () => {
   const state = createGame({ words: HUULI_1 });
   assert.equal(currentWord(state), 'AIE');
-  // Play every step as an anagram of the target word where possible.
-  assert.equal(submitWord(state, 'ENIA').result, 'advanced'); // AINE
-  assert.equal(submitWord(state, 'MEINA').result, 'advanced'); // ANIME
+  assert.equal(submitWord(state, 'AINE').result, 'advanced');
+  assert.equal(submitWord(state, 'ANIME').result, 'advanced');
   assert.equal(submitWord(state, 'ANEMIA').result, 'advanced');
   assert.equal(submitWord(state, 'AINEUMA').result, 'advanced');
   assert.equal(submitWord(state, 'IMEMUNAA').result, 'won');
@@ -62,11 +63,44 @@ test('full playthrough with anagrams wins the game', () => {
   assert.equal(submitWord(state, 'IMEMUNAA').result, 'inactive');
 });
 
+test('a jumble of the right letters does not advance', () => {
+  const state = createGame({ words: HUULI_1 });
+  // The letters of AINE in an order that spells nothing. Accepting this let
+  // a player brute-force the chain by tapping tiles in any order at all.
+  assert.equal(submitWord(state, 'ENIA').result, 'rejected');
+  assert.equal(submitWord(state, 'IENA').result, 'rejected');
+  assert.equal(state.index, 0);
+  assert.equal(submitWord(state, 'AINE').result, 'advanced');
+});
+
+test('curated alternative spellings advance', () => {
+  const state = createGame({
+    words: ['ILO', 'OLKI'],
+    alternatives: { OLKI: ['KILO'] },
+  });
+  assert.ok(isAcceptedSpelling(state, 'OLKI', 'KILO'));
+  assert.ok(isAcceptedSpelling(state, 'OLKI', 'OLKI'));
+  assert.ok(!isAcceptedSpelling(state, 'OLKI', 'OLIK')); // not a word, not listed
+  assert.equal(submitWord(state, 'KILO').result, 'won');
+});
+
+test('normalizeAlternatives rejects miscurated data', () => {
+  const words = ['ILO', 'OLKI'];
+  // An alternative has to be an anagram of the word it stands in for.
+  assert.throws(() => normalizeAlternatives({ OLKI: ['OLKA'] }, words), /not an anagram/);
+  // ...and it has to belong to a word that is actually in the chain.
+  assert.throws(() => normalizeAlternatives({ KISSA: ['SIKAS'] }, words), /not in the chain/);
+  // Case is normalized on the way in, like the chain itself.
+  assert.deepEqual(normalizeAlternatives({ olki: ['kilo'] }, words).get('OLKI'), ['KILO']);
+  assert.equal(normalizeAlternatives(undefined, words).size, 0);
+});
+
 test('wrong words are rejected without advancing', () => {
   const state = createGame({ words: HUULI_1 });
   assert.equal(submitWord(state, 'AIE').result, 'rejected'); // missing the new letter
   assert.equal(submitWord(state, 'AIET').result, 'rejected'); // wrong added letter
   assert.equal(submitWord(state, 'ANIME').result, 'rejected'); // skipping a step
+  assert.equal(submitWord(state, 'ENIA').result, 'rejected'); // right letters, not a word
   assert.equal(submitWord(state, '').result, 'empty');
   assert.equal(state.index, 0);
   assert.equal(state.status, 'playing');

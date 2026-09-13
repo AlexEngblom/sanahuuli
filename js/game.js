@@ -59,9 +59,38 @@ export function validateChain(words) {
   return { words: normalized, addedLetters };
 }
 
+// Spellings other than the chain's own word that still advance a step.
+// There is no dictionary, so the data is the only thing that can say which
+// other real words are allowed — ILO + K is OLKI in the chain, but KILO is
+// just as valid a word and has to be listed to be accepted.
+export function normalizeAlternatives(alternatives, words) {
+  const byWord = new Map();
+  for (const [word, spellings] of Object.entries(alternatives ?? {})) {
+    const canonical = normalizeWord(word);
+    if (!words.includes(canonical)) {
+      throw new Error(`Alternatives listed for "${canonical}", which is not in the chain`);
+    }
+    const normalized = spellings.map(normalizeWord);
+    for (const spelling of normalized) {
+      if (!isAnagram(spelling, canonical)) {
+        throw new Error(`Alternative "${spelling}" is not an anagram of "${canonical}"`);
+      }
+    }
+    byWord.set(canonical, normalized);
+  }
+  return byWord;
+}
+
 export function createGame(chain) {
   const { words, addedLetters } = validateChain(chain.words);
-  return { words, addedLetters, index: 0, status: 'playing' };
+  const alternatives = normalizeAlternatives(chain.alternatives, words);
+  return { words, addedLetters, alternatives, index: 0, status: 'playing' };
+}
+
+// Does `word` spell the step `target`? The chain's own word always does; any
+// other spelling has to be curated in the chain data.
+export function isAcceptedSpelling(state, target, word) {
+  return word === target || (state.alternatives?.get(target) ?? []).includes(word);
 }
 
 export function currentWord(state) {
@@ -105,7 +134,7 @@ export function submitWord(state, input) {
   const word = normalizeWord(input);
   if (word.length === 0) return { result: 'empty' };
   const target = state.words[state.index + 1];
-  if (!isAnagram(word, target)) return { result: 'rejected' };
+  if (!isAcceptedSpelling(state, target, word)) return { result: 'rejected' };
   state.index += 1;
   if (state.index === state.words.length - 1) {
     state.status = 'won';
