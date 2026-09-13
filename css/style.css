@@ -61,7 +61,9 @@ main {
   align-items: center;
   justify-content: flex-end;
   gap: 1rem;
-  padding: 0 1rem 2rem;
+  /* Content is bottom-aligned, so this padding is what lifts it clear of
+     the bottom edge — raise it to give the controls more room below. */
+  padding: 0 1rem 3.5rem;
   max-width: 520px;
   margin: 0 auto;
   width: 100%;
@@ -166,6 +168,9 @@ main {
   grid-template-columns: repeat(4, auto);
   justify-content: center;
   gap: var(--bank-gap);
+  /* On top of main's 1rem row gap — the bank wants more air than the
+     board-to-message spacing does. */
+  margin-block: 0.75rem;
   width: 100%;
   container-type: inline-size;
   --bank-gap: 8px;

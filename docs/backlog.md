@@ -8,7 +8,7 @@
 
 ~~5. Pienennetään kirjainvalikon laatikoita hieman.~~ — TEHTY: Kirjainpankin laatat 56px → 48px, kirjainkoko ennallaan.
 
-6. Pidetään kirjainvalikon järjestys samana vaikka päivittäisin sivua.
+~~6. Pidetään kirjainvalikon järjestys samana vaikka päivittäisin sivua.~~ — PERUTTU: toteutettiin (järjestys localStorageen etenemisen mukana), mutta todettiin ettei sekoittuminen päivityksessä ole käytännössä ongelma. Muutos peruttu, ei kannata tehdä uudelleen.
 
 7. Koodissa on suomea ja englantia sekaisin ainakin kommenteissa. Pidetään englantina.
 
