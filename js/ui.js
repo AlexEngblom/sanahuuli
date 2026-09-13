@@ -60,6 +60,9 @@ export function renderGame(refs, model) {
 function renderPyramid(pyramid, { state, inputLetters }) {
   const playing = state.status === 'playing';
   const inputRow = state.index + 1;
+  // Widest row drives the box size — see --box in the stylesheet.
+  const columns = Math.max(...state.words.map((word) => word.length));
+  pyramid.style.setProperty('--cols', String(columns));
   const rows = state.words.map((word, rowIndex) => {
     const row = document.createElement('div');
     row.className = 'row';

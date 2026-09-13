@@ -88,21 +88,30 @@ main {
 
 /* Word pyramid */
 
+/* The board's real constraint is the longest word in the chain, not the
+   viewport — so --cols (set from JS) and the pyramid's own width decide the
+   box size. No breakpoints: the size is continuous at every width, and a
+   longer chain simply gets smaller boxes instead of overflowing. */
 .pyramid {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: var(--box-gap);
+  width: 100%;
+  container-type: inline-size;
+  --cols: 8;
+  --box-gap: 5px;
+  --box: min(44px, (100cqw - (var(--cols) - 1) * var(--box-gap)) / var(--cols));
 }
 
 .row {
   display: flex;
-  gap: 5px;
+  gap: var(--box-gap);
 }
 
 .box {
-  width: 44px;
-  height: 44px;
+  width: var(--box);
+  height: var(--box);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -110,7 +119,7 @@ main {
   border-radius: 6px;
   background: transparent;
   color: var(--fg);
-  font-size: 1.5rem;
+  font-size: calc(var(--box) * 0.55);
   font-weight: 700;
   padding: 0;
 }
@@ -284,18 +293,4 @@ dialog form {
 
 .error-box a {
   color: var(--accent);
-}
-
-/* Narrow phones: shrink boxes so the widest row always fits */
-
-@media (max-width: 400px) {
-  .box {
-    width: 34px;
-    height: 34px;
-    font-size: 1.2rem;
-  }
-
-  .row {
-    gap: 4px;
-  }
 }
