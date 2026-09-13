@@ -15,20 +15,22 @@ Yksinkertainen sanapeli polttariviikonloppuun: pelaajat muodostavat sanoja, jotk
 **Latautuessa:**
 - Lukee ketjun id:n query stringistä ja lataa ketjun JSON:n.
 - Näyttää ensimmäisen sanan ja koko kirjainpoolin (kaikki ketjun aikana lisättävät kirjaimet).
+- Näyttää laudan yläpuolella ohjeen "Käytä kaikki edellisen sanan kirjaimet ja yksi uusi". Ohje katoaa ensimmäisestä napautuksesta, eikä sitä näytetä kesken jäänyttä peliä jatkettaessa.
 - Puuttuva/tuntematon ketju-id → ystävällinen virheviesti ja linkki takaisin listaukseen.
 
 **Pelatessa:**
 - Ketju näytetään pyramidina: täydennetyt rivit ylhäällä, nykyinen rivi aktiivisena, tulevat rivit tyhjinä laatikoina.
 - Pelaaja muodostaa seuraavan sanan klikkaamalla **kirjainpankin** laattoja (nykyisen sanan kirjaimet + jäljellä olevat uudet kirjaimet) ja/tai fyysisellä näppäimistöllä. Nykyisen sanan kirjaimet näytetään tummina laattoina ja vielä käyttämättömät uudet kirjaimet kirkkaina — näin pelaaja hahmottaa, mikä kirjain vie eteenpäin.
 - Laatat menevät nykyiselle riville järjestyksessä; rivin laatikkoa klikkaamalla tai Backspacella kirjaimen voi poistaa. **✕** tyhjentää rivin, **↻** sekoittaa pankin.
-- Sanan lähettäminen:
+- Sanan lähettäminen: **sana lähtee automaattisesti, kun rivi täyttyy** — erillistä lähetysnappia ei ole. Enter lähettää myös vajaan rivin.
   - Oikea seuraava sana tai sen anagrammi → etene seuraavalle riville.
-  - Kaikki muu → lempeä "ei etene" -palaute; yrittäminen on vapaata (ei elämiä, ei pisteitä).
+  - Kaikki muu → lempeä "ei etene" -palaute; yrittäminen on vapaata (ei elämiä, ei pisteitä). Palaute erottelee kaksi tapausta: edellisen sanan kirjaimia jäi käyttämättä (kirjainten lukumäärät huomioiden), vai oliko kyseessä väärä yhdistelmä.
 - **Lopeta**-nappi: kysyy, haluaako pelaaja palata jatkamaan myöhemmin. Kyllä säilyttää etenemisen, ei tyhjentää sen — molemmissa tapauksissa pelaaja palaa ketjulistaukseen. Ketjua ei koskaan paljasteta.
+- **Vihje**-nappi on käyttöliittymässä, mutta se ei vielä anna oikeaa vihjettä — se tulostaa vitsirivin. Varsinainen vihjetoiminto on yhä pois scopesta.
 - **ⓘ-nappi** yläkulmassa avaa ohjeet modaalina.
 
 **Voitto:**
-- Viimeisen sanan muodostaminen näyttää voittoruudun ja koko valmiin ketjun.
+- Viimeisen sanan muodostaminen paljastaa koko ketjun, näyttää onnitteluviestin ja korvaa pelinapit **Pelaa uudelleen** -napilla. Erillistä voittomodaalia ei ole.
 
 ## Visuaalinen suunta
 
@@ -54,5 +56,6 @@ Yksinkertainen sanapeli polttariviikonloppuun: pelaajat muodostavat sanoja, jotk
 ## Pois scopesta (toistaiseksi)
 
 - Mielivaltaisten sanojen sanastovalidointi — vain ketjun seuraava sana vie eteenpäin.
-- Vihjeet, pisteet, ajastin, vaikeustasot.
+- Oikeat vihjeet, pisteet, ajastin, vaikeustasot. (Vihje-nappi on olemassa, mutta vain vitsinä.)
+- Kesken olevan rivin säilyttäminen sivun päivityksessä — eteneminen säilyy, mutta jo napautetut kirjaimet eivät.
 - Käyttäjien luomat ketjut käyttöliittymässä, jakomekaniikat pelkkien linkkien lisäksi.

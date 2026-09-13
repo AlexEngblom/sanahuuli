@@ -60,7 +60,16 @@ Ketjutiedosto (`data/chains/<id>.json`):
 - Latauksen yhteydessä "oikea" lisäkirjain per siirtymä johdetaan ketjusta (seuraavan sanan kirjaimet miinus edellisen sanan kirjaimet). Pelaajalle näytettävä **kirjainpankki** on nykyisen sanan kirjaimet + jäljellä olevat lisäkirjaimet — pankin koko pysyy vakiona koko pelin ajan (HS:n Sanajuuren tyyliin). Nykyisen sanan kirjaimet ja jäljellä olevat lisäkirjaimet renderöidään eri tyylein, jotta pelaaja näkee mikä kirjain vie eteenpäin.
 - **Siirron validointi:** syötteen täytyy koostua täsmälleen edellisen sanan kirjaimista plus yhdestä uudesta kirjaimesta. Eteneminen edellyttää, että syöte vastaa ketjun seuraavaa sanaa **anagrammina** (sama kirjainjoukko, ei välttämättä sama merkkijono).
 - **Pelitila:** nykyinen indeksi, tila (`playing` / `won`). Lopetus ei ole pelitila vaan poistuminen: peli kysyy säilytetäänkö eteneminen ja palaa listaukseen.
+- **Palaute hylätystä siirrosta:** `missingLetters()` vertaa edellisen sanan kirjaimia syötteeseen **lukumäärät huomioiden**, jotta "käytit vain toisen A:sta" tunnistetaan puuttuvaksi kirjaimeksi. Aiempi "sisältyykö kirjain" -tarkistus antoi toistuvilla kirjaimilla väärän viestin.
 - Kaikki logiikka on puhdasta ja DOM-vapaata, jotta se on yksikkötestattavissa Nodessa.
+
+## Tyylit ja asettelu (`css/style.css`)
+
+Nämä kolme ratkaisua eivät ole ilmeisiä koodia lukemalla, ja kaksi ensimmäistä menee helposti rikki "siivottaessa".
+
+- **Ei media queryjä, eikä niitä pidä lisätä takaisin.** Laudan oikea rajoite ei ole ruudun leveys vaan ketjun pisin sana — jota breakpoint ei voi tietää. Pyramidi on container query -konteksti (`container-type: inline-size`), ja laatikon koko lasketaan sen omasta leveydestä ja `--cols`-muuttujasta, jonka `ui.js` asettaa pisimmän sanan mukaan: `--box: min(52px, (100cqw − välit) / var(--cols))`. Koko on siis portaaton kaikilla leveyksillä, ja pidempi ketju kutistaa laatikoita sen sijaan että valuisi yli reunan. Kirjainpankki on mitoitettu samalla periaatteella.
+- **`.box`-laatikoihin ei saa laittaa `display: flex`.** Pelkkiä isoja kirjaimia keskitettäessä riviboksi varaa tilaa ala-pidennyksille joita ei koskaan tule, jolloin kirjain jää liian ylös. `text-box: trim-both cap alphabetic` korjaa sen, mutta se vaikuttaa **vain block-containereihin** — `display: flex` kytkee sen hiljaisesti pois ilman virheilmoitusta. Sekä `.box` että `.tile` nojaavat siksi napin natiiviin keskitykseen.
+- **Pystyasettelu on sivukohtainen.** `main` sisältää vain sivuille yhteisen osan; asemoinnin tekevät `body[data-page="game"]` ja `body[data-page="list"]`. Peli on alareunassa peukalon ulottuvilla, listaus alkaa ylhäältä ja täyttää sivun.
 
 ## Tilan säilyvyys (localStorage)
 
@@ -71,7 +80,8 @@ Ketjutiedosto (`data/chains/<id>.json`):
 ## Testaus
 
 - `node --test` `test/`-hakemistoon, ajetaan lokaalisti ja CI:ssä.
-- Tapaukset: normaalitapaus, väärä lisäkirjain, anagrammien hyväksyntä, ääkkösten käsittely, viimeinen sana → voitto, ketjudatan eheys (jokainen askel +1 kirjain, anagrammi-edellisestä-plus-yksi -invariantti).
+- Tapaukset: normaalitapaus, väärä lisäkirjain, anagrammien hyväksyntä, ääkkösten käsittely, viimeinen sana → voitto, palautteen kirjaslaskenta (`missingLetters`), tallennetun etenemisen palautus ja rajaus, ketjudatan eheys (jokainen askel +1 kirjain, anagrammi-edellisestä-plus-yksi -invariantti).
+- Tyylejä ei testaa mikään — CSS-muutokset on katsottava selaimessa molemmilta sivuilta.
 
 ## Julkaisu
 
@@ -83,4 +93,6 @@ Ketjutiedosto (`data/chains/<id>.json`):
 - Sanasto- / oikolukutarkistus
 - Sanaketjujen generaattori
 - Käyttäjien luomat ketjut (vaatii persistointia — shelvattu; mahdollisia tulevia vaihtoehtoja: JSON leikepöydälle/lataukseen PR:ää varten, tai URL-koodatut ketjut)
-- Vihjeet, pisteet, ajastin, tunnistautuminen
+- Oikeat vihjeet, pisteet, ajastin, tunnistautuminen. Käyttöliittymässä on Vihje-nappi, mutta se tulostaa vain vitsirivin.
+- **Kirjainpankin järjestyksen säilyttäminen sivun päivityksessä.** Tämä toteutettiin kerran (järjestys localStorageen etenemisen mukana, `isValidTileOrder`) ja peruttiin tietoisesti: laattojen sekoittuminen päivityksessä ei osoittautunut ongelmaksi, eikä lisätty tila ollut sen arvoista. Älä tee uudelleen ilman uutta perustetta.
+- Kesken olevan rivin säilyttäminen sivun päivityksessä.
