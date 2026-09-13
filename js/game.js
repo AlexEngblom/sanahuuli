@@ -84,7 +84,11 @@ export function normalizeAlternatives(alternatives, words) {
 export function createGame(chain) {
   const { words, addedLetters } = validateChain(chain.words);
   const alternatives = normalizeAlternatives(chain.alternatives, words);
-  return { words, addedLetters, alternatives, index: 0, status: 'playing' };
+  // What the board shows per row. Starts as the chain's own words and is
+  // overwritten with the player's spelling when they solve a row with a
+  // curated alternative — writing MAINE and being shown ANIME is jarring.
+  const spellings = [...words];
+  return { words, addedLetters, alternatives, spellings, index: 0, status: 'playing' };
 }
 
 // Does `word` spell the step `target`? The chain's own word always does; any
@@ -136,6 +140,7 @@ export function submitWord(state, input) {
   const target = state.words[state.index + 1];
   if (!isAcceptedSpelling(state, target, word)) return { result: 'rejected' };
   state.index += 1;
+  state.spellings[state.index] = word;
   if (state.index === state.words.length - 1) {
     state.status = 'won';
     return { result: 'won' };

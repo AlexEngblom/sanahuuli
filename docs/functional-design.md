@@ -24,6 +24,7 @@ Yksinkertainen sanapeli polttariviikonloppuun: pelaajat muodostavat sanoja, jotk
 - Laatat menevät nykyiselle riville järjestyksessä. Kirjaimen voi poistaa kolmella tavalla: klikkaamalla sitä rivin laatikosta, klikkaamalla jo käytettyä laattaa uudelleen kirjainpankissa, tai Backspacella (poistaa viimeisimmän). **✕** tyhjentää rivin, **↻** sekoittaa pankin.
 - Sanan lähettäminen: **sana lähtee automaattisesti, kun rivi täyttyy** — erillistä lähetysnappia ei ole. Enter lähettää myös vajaan rivin.
   - Ketjun seuraava sana kirjaimelleen, tai ketjudataan kuratoitu vaihtoehtoinen kirjoitusasu → etene seuraavalle riville. Oikeat kirjaimet väärässä järjestyksessä eivät riitä.
+  - Ratkaistulle riville jää se kirjoitusasu jonka pelaaja käytti, ei ketjun kanoninen sana. Sivun päivitys palauttaa kanonisen sanan, koska kirjoitusasua ei tallenneta.
   - Kaikki muu → lempeä "ei etene" -palaute; yrittäminen on vapaata (ei elämiä, ei pisteitä). Palaute erottelee kaksi tapausta: edellisen sanan kirjaimia jäi käyttämättä (kirjainten lukumäärät huomioiden), vai eikö syöte muuten etene. Peli ei kerro oliko kirjainvalinta oikea — se paljastaisi puolet vastauksesta.
 - **Lopeta**-nappi: kysyy, haluaako pelaaja palata jatkamaan myöhemmin. Kyllä säilyttää etenemisen, ei tyhjentää sen — molemmissa tapauksissa pelaaja palaa ketjulistaukseen. Ketjua ei koskaan paljasteta.
 - **Vihje**-nappi on käyttöliittymässä, mutta se ei vielä anna oikeaa vihjettä — se tulostaa vitsirivin. Varsinainen vihjetoiminto on yhä pois scopesta.

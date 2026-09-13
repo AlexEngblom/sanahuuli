@@ -58,6 +58,8 @@ export function renderGame(refs, model) {
 }
 
 function renderPyramid(pyramid, { state, inputLetters }) {
+  // Rows show state.spellings, not state.words: an alternative spelling the
+  // player chose stays on the board.
   const playing = state.status === 'playing';
   const inputRow = state.index + 1;
   // Widest row drives the box size — see --box in the stylesheet.
@@ -72,7 +74,7 @@ function renderPyramid(pyramid, { state, inputLetters }) {
     // A finished game reveals every row.
     let letters = [];
     if (!playing || rowIndex <= state.index) {
-      letters = [...word];
+      letters = [...state.spellings[rowIndex]];
     } else if (rowIndex === inputRow) {
       letters = inputLetters;
     }

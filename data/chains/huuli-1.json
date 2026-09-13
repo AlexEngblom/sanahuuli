@@ -1,5 +1,6 @@
 {
   "id": "huuli-1",
   "name": "Sanahuuli #1",
-  "words": ["AIE", "AINE", "ANIME", "ANEMIA", "AINEUMA", "IMEMUNAA"]
+  "words": ["AIE", "AINE", "ANIME", "ANEMIA", "AINEUMA", "IMEMUNAA"],
+  "alternatives": { "ANIME": ["MAINE"] }
 }

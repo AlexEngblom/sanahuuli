@@ -95,6 +95,17 @@ test('normalizeAlternatives rejects miscurated data', () => {
   assert.equal(normalizeAlternatives(undefined, words).size, 0);
 });
 
+test('a solved row keeps the spelling the player used', () => {
+  const state = createGame({ words: ['ILO', 'OLKI'], alternatives: { OLKI: ['KILO'] } });
+  submitWord(state, 'KILO');
+  assert.equal(state.spellings[1], 'KILO');
+  assert.equal(state.words[1], 'OLKI'); // the chain itself is untouched
+  // Solving with the chain's own word changes nothing.
+  const plain = createGame({ words: ['ILO', 'OLKI'], alternatives: { OLKI: ['KILO'] } });
+  submitWord(plain, 'OLKI');
+  assert.deepEqual(plain.spellings, ['ILO', 'OLKI']);
+});
+
 test('wrong words are rejected without advancing', () => {
   const state = createGame({ words: HUULI_1 });
   assert.equal(submitWord(state, 'AIE').result, 'rejected'); // missing the new letter
@@ -158,6 +169,7 @@ test('all chains shipped in the repo are valid', async () => {
     const chainUrl = new URL(`../data/chains/${entry.id}.json`, import.meta.url);
     const chain = JSON.parse(await readFile(chainUrl, 'utf8'));
     assert.equal(chain.id, entry.id, `id mismatch in ${entry.id}.json`);
-    assert.doesNotThrow(() => validateChain(chain.words), `invalid chain: ${entry.id}`);
+    // createGame validates the words and any curated alternatives together.
+    assert.doesNotThrow(() => createGame(chain), `invalid chain: ${entry.id}`);
   }
 });
