@@ -65,7 +65,7 @@ async function initGamePage() {
 
   refs.infoButton.addEventListener('click', () => refs.dialog.showModal());
 
-  const chainId = new URLSearchParams(location.search).get('juuri');
+  const chainId = new URLSearchParams(location.search).get('huuli');
   if (!chainId) {
     renderError(refs.root, 'Ketjua ei valittu.');
     return;

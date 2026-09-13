@@ -4,7 +4,7 @@
 
 - Hostataan **GitHub Pagesissa** — täysin staattinen, ei backendia, ei tunnistautumista, ei palvelinpuolen persistointia.
 - Toimittava mobiiliselaimilla (ensisijainen laite polttariviikonloppuna).
-- Suorien linkkien (esim. `peli.html?juuri=<id>`) on toimittava hostattuna (query stringit ovat turvallisia staattisessa hostauksessa).
+- Suorien linkkien (esim. `peli.html?huuli=<id>`) on toimittava hostattuna (query stringit ovat turvallisia staattisessa hostauksessa).
 
 ## Teknologiavalinnat
 
@@ -19,7 +19,7 @@
 
 ```
 index.html                  # Ketjulistaus (lukee data/chains/manifest.json)
-peli.html                   # Pelisivu (lukee ?juuri=<id>, lataa data/chains/<id>.json)
+peli.html                   # Pelisivu (lukee ?huuli=<id>, lataa data/chains/<id>.json)
 css/
   style.css                 # Mobiilifirst-tyylit
 js/

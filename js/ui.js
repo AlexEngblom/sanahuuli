@@ -3,7 +3,7 @@
 export function renderList(listEl, chains) {
   const items = chains.map((chain) => {
     const link = document.createElement('a');
-    link.href = `peli.html?juuri=${encodeURIComponent(chain.id)}`;
+    link.href = `peli.html?huuli=${encodeURIComponent(chain.id)}`;
     link.className = 'chain-link';
 
     const name = document.createElement('span');

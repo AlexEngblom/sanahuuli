@@ -7,10 +7,10 @@ Yksinkertainen sanapeli polttariviikonloppuun: pelaajat muodostavat sanoja, jotk
 ### 1. Ketjulistaus (`index.html`)
 
 - Listaa kaikki saatavilla olevat ketjut tiedostosta `data/chains/manifest.json` (nimi + kuvaus).
-- Jokainen ketju linkittää pelisivulle: `peli.html?juuri=<id>`.
+- Jokainen ketju linkittää pelisivulle: `peli.html?huuli=<id>`.
 - Uudet ketjut lisätään committaamalla datatiedostoja repoon — ei luontia sovelluksessa (toistaiseksi).
 
-### 2. Peli (`peli.html?juuri=<id>`)
+### 2. Peli (`peli.html?huuli=<id>`)
 
 **Latautuessa:**
 - Lukee ketjun id:n query stringistä ja lataa ketjun JSON:n.
