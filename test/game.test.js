@@ -161,6 +161,27 @@ test('missingLetters counts duplicates, not just presence', () => {
   assert.deepEqual(missingLetters('ÄLÄ', 'ALAS'), ['Ä', 'Ä']);
 });
 
+test('applyProgress restores spellings and discards stale ones', () => {
+  const chain = { words: ['ILO', 'OLKI'], alternatives: { OLKI: ['KILO'] } };
+
+  const state = createGame(chain);
+  applyProgress(state, { index: 1, status: 'won', spellings: ['ILO', 'KILO'] });
+  assert.deepEqual(state.spellings, ['ILO', 'KILO']);
+
+  // A spelling the chain no longer accepts falls back to the chain's word.
+  const stale = createGame(chain);
+  applyProgress(stale, { index: 1, status: 'won', spellings: ['ILO', 'OLIK'] });
+  assert.deepEqual(stale.spellings, ['ILO', 'OLKI']);
+
+  // Saves from before spellings existed, or of the wrong shape, are ignored.
+  const old = createGame(chain);
+  applyProgress(old, { index: 1, status: 'won' });
+  assert.deepEqual(old.spellings, ['ILO', 'OLKI']);
+  const short = createGame(chain);
+  applyProgress(short, { index: 1, spellings: ['KILO'] });
+  assert.deepEqual(short.spellings, ['ILO', 'OLKI']);
+});
+
 test('all chains shipped in the repo are valid', async () => {
   const manifestUrl = new URL('../data/chains/manifest.json', import.meta.url);
   const manifest = JSON.parse(await readFile(manifestUrl, 'utf8'));

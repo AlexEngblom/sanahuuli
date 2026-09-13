@@ -15,7 +15,11 @@ export function loadProgress(chainId) {
 
 export function saveProgress(chainId, state) {
   try {
-    const snapshot = { index: state.index, status: state.status };
+    const snapshot = {
+      index: state.index,
+      status: state.status,
+      spellings: state.spellings,
+    };
     localStorage.setItem(PREFIX + chainId, JSON.stringify(snapshot));
   } catch {
     // Storage unavailable — play on without persistence.

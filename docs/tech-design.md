@@ -76,7 +76,7 @@ Nämä kolme ratkaisua eivät ole ilmeisiä koodia lukemalla, ja kaksi ensimmäi
 
 ## Tilan säilyvyys (localStorage)
 
-- Pelin eteneminen tallennetaan selaimen localStorageen avaimella `sanahuuli:progress:<chainId>` (`{ index, status }`).
+- Pelin eteneminen tallennetaan selaimen localStorageen avaimella `sanahuuli:progress:<chainId>` (`{ index, status, spellings }`).
 - Tila palautetaan latautuessa, jotta peli ei häviä vahingossa (esim. sivun päivitys).
 - "Pelaa uudelleen" tyhjentää tallennetun tilan. Ei synkronointia laitteiden välillä (ei backendia).
 

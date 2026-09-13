@@ -148,6 +148,18 @@ export function submitWord(state, input) {
   return { result: 'advanced' };
 }
 
+// Restores the spellings a player solved rows with. Anything that no longer
+// fits the chain is dropped back to the chain's own word — a chain edited
+// since the save must never put a stale word on the board.
+function applySpellings(state, spellings) {
+  if (!Array.isArray(spellings) || spellings.length !== state.words.length) return;
+  state.spellings = state.words.map((word, rowIndex) => {
+    if (rowIndex > state.index) return word;
+    const saved = normalizeWord(String(spellings[rowIndex] ?? ''));
+    return isAcceptedSpelling(state, word, saved) ? saved : word;
+  });
+}
+
 // Restores saved localStorage progress into a fresh game state.
 export function applyProgress(state, progress) {
   const index = Math.min(
@@ -158,5 +170,6 @@ export function applyProgress(state, progress) {
   if (progress?.status === 'won') {
     state.status = 'won';
   }
+  applySpellings(state, progress?.spellings);
   return state;
 }
