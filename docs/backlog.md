@@ -10,9 +10,9 @@
 
 ~~6. Pidetään kirjainvalikon järjestys samana vaikka päivittäisin sivua.~~ — PERUTTU: toteutettiin (järjestys localStorageen etenemisen mukana), mutta todettiin ettei sekoittuminen päivityksessä ole käytännössä ongelma. Muutos peruttu, ei kannata tehdä uudelleen.
 
-7. Koodissa on suomea ja englantia sekaisin ainakin kommenteissa. Pidetään englantina.
+~~7. Koodissa on suomea ja englantia sekaisin ainakin kommenteissa. Pidetään englantina.~~ — TEHTY: kommentit englanniksi, HS-viittaukset pois koodista. Dokumentit pysyvät suomeksi ja niiden HS-maininnat jätettiin tarkoituksella.
 
-8. Pelilistaus sivun ei ehkä pitäisi olla keskittynyt alas vaan saisi viedä koko sivun.
+~~8. Pelilistaus sivun ei ehkä pitäisi olla keskittynyt alas vaan saisi viedä koko sivun.~~ — TEHTY: main-asettelu eriytetty sivukohtaiseksi; listaus alkaa ylhäältä ja täyttää sivun, peli pysyy alareunassa.
 
 Matkan varrella tehtyä, ei alun perin backlogilla:
 - Ohjeteksti "Käytä kaikki edellisen sanan kirjaimet ja yksi uusi" uuden huulen alussa.

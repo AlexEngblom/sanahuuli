@@ -59,14 +59,39 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
   gap: 1rem;
-  /* Content is bottom-aligned, so this padding is what lifts it clear of
-     the bottom edge — raise it to give the controls more room below. */
-  padding: 0 1rem 3.5rem;
+  padding: 0 1rem;
   max-width: 520px;
   margin: 0 auto;
   width: 100%;
+}
+
+/* The board sits at the bottom of the page, within thumb reach on a phone.
+   The padding is what lifts it clear of the bottom edge — raise it to give
+   the controls more room below. */
+body[data-page="game"] main {
+  justify-content: flex-end;
+  padding-bottom: 3.5rem;
+}
+
+/* The chain list reads top-down instead, filling the page from under the
+   header rather than hugging the bottom of the viewport. */
+body[data-page="list"] main {
+  justify-content: flex-start;
+  align-items: stretch;
+  padding-block: 0.5rem 2rem;
+}
+
+body[data-page="list"] h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* Here the message is a plain status line, not centred game feedback, and
+   it needs no reserved height because nothing shifts when it goes away. */
+body[data-page="list"] .message {
+  min-height: 0;
+  text-align: left;
 }
 
 .instruction {
@@ -258,7 +283,6 @@ main {
   flex-direction: column;
   gap: 12px;
   width: 100%;
-  max-width: 28rem;
 }
 
 .chain-link {
