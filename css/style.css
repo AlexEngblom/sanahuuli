@@ -15,6 +15,12 @@
   box-sizing: border-box;
 }
 
+/* .pill-icon sets an explicit display, which would otherwise beat the
+   UA rule that makes the hidden attribute work. */
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   min-height: 100dvh;
@@ -169,11 +175,15 @@ main {
 
 /* Controls */
 
+/* All controls stay on one row: the gap and the pill padding give up
+   space as the viewport narrows, and the icon buttons are round rather
+   than pill-wide so they cost the least. */
 .controls {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: clamp(6px, 2.5vw, 12px);
+  align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 .pill {
@@ -181,9 +191,22 @@ main {
   color: var(--fg);
   border: 1px solid var(--fg);
   border-radius: 999px;
-  padding: 0.6rem 1.4rem;
+  padding: 0.6rem clamp(0.9rem, 4vw, 1.4rem);
   font-size: 1rem;
+  line-height: 1.25;
+  white-space: nowrap;
   cursor: pointer;
+}
+
+.pill-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  font-size: 1.15rem;
 }
 
 .pill:hover {

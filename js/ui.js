@@ -46,6 +46,7 @@ export function renderGame(refs, model) {
   refs.giveUp.hidden = !playing;
   refs.clear.hidden = !playing;
   refs.shuffle.hidden = !playing;
+  refs.hint.hidden = !playing;
   refs.playAgain.hidden = playing;
 
   if (model.state.status === 'won') {
