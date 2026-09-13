@@ -13,6 +13,9 @@ import { renderList, renderError, renderGame } from './ui.js';
 
 const page = document.body.dataset.page;
 
+// Shown above the board at the start of a fresh chain, cleared on first tap.
+const START_HINT = 'Käytä kaikki edellisen sanan kirjaimet ja yksi uusi';
+
 if (page === 'list') {
   initListPage();
 } else if (page === 'game') {
@@ -83,7 +86,8 @@ async function initGamePage() {
   let tiles = [];
   let order = [];
   let input = [];
-  let message = '';
+  // Resumed games skip the hint — the player has already seen it.
+  let message = state.index === 0 && state.status === 'playing' ? START_HINT : '';
 
   function rebuildBank() {
     tiles = letterBank(state).map((tile, id) => ({ id, ...tile }));
@@ -125,7 +129,7 @@ async function initGamePage() {
   function reset() {
     clearProgress(chainId);
     state = createGame(chain);
-    message = '';
+    message = START_HINT;
     rebuildBank();
     render();
   }

@@ -50,7 +50,8 @@ export function renderGame(refs, model) {
 
   if (model.state.status === 'won') {
     refs.message.textContent = 'Huuli huulteltu! 🎉';
-  } else if (model.message) {
+  } else {
+    // Always assign — an empty message has to clear the previous one.
     refs.message.textContent = model.message;
   }
 }
