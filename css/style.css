@@ -229,7 +229,6 @@ body[data-page="list"] .message {
 .tile.picked {
   background: var(--pending);
   color: var(--pending-fg);
-  cursor: default;
 }
 
 /* Controls */

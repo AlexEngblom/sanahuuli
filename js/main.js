@@ -134,12 +134,23 @@ async function initGamePage() {
     render();
   }
 
-  // Click a bank tile to add its letter to the current row.
+  // Click a bank tile to add its letter to the current row — or, if it is
+  // already on the row, to take it back off. Same effect as clicking the
+  // letter in the pyramid, from whichever end the player reaches for.
   refs.bank.addEventListener('click', (event) => {
     const button = event.target.closest('.tile');
     if (!button || button.disabled) return;
-    input.push(Number(button.dataset.tileId));
+    const tileId = Number(button.dataset.tileId);
     message = '';
+
+    const placed = input.indexOf(tileId);
+    if (placed !== -1) {
+      input.splice(placed, 1);
+      render();
+      return;
+    }
+
+    input.push(tileId);
     // The word submits automatically once the row is full.
     if (input.length === state.words[state.index + 1].length) {
       submit();

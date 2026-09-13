@@ -120,7 +120,8 @@ function renderBank(bank, { tiles, order, input, state }) {
     }
     button.textContent = tile.letter;
     button.dataset.tileId = String(tileId);
-    button.disabled = !playing || used.has(tileId);
+    // Picked tiles stay enabled: tapping one takes the letter back.
+    button.disabled = !playing;
     return button;
   });
   bank.replaceChildren(...buttons);
