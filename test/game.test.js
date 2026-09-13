@@ -5,7 +5,6 @@ import {
   validateChain,
   createGame,
   submitWord,
-  giveUp,
   applyProgress,
   isAnagram,
   addedLetter,
@@ -77,14 +76,6 @@ test('lowercase input is accepted', () => {
   assert.equal(submitWord(state, 'aine').result, 'advanced');
 });
 
-test('giveUp reveals the chain and blocks further moves', () => {
-  const state = createGame({ words: HUULI_1 });
-  submitWord(state, 'AINE');
-  assert.equal(giveUp(state).result, 'given-up');
-  assert.equal(state.status, 'given-up');
-  assert.equal(submitWord(state, 'ANIME').result, 'inactive');
-});
-
 test('letter bank = current word + remaining added letters, constant size', () => {
   const state = createGame({ words: HUULI_1 });
   const size = letterBank(state).length;
@@ -107,6 +98,9 @@ test('applyProgress restores and clamps saved progress', () => {
   const fresh = createGame({ words: HUULI_1 });
   applyProgress(fresh, null);
   assert.equal(fresh.index, 0);
+  // Stale saves from the old give-up flow resume as a normal game.
+  applyProgress(fresh, { index: 1, status: 'given-up' });
+  assert.equal(fresh.status, 'playing');
 });
 
 test('all chains shipped in the repo are valid', async () => {

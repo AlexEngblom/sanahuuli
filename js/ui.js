@@ -50,8 +50,6 @@ export function renderGame(refs, model) {
 
   if (model.state.status === 'won') {
     refs.message.textContent = 'Huuli huulteltu! 🎉';
-  } else if (model.state.status === 'given-up') {
-    refs.message.textContent = 'Peli lopetettu — tässä koko ketju.';
   } else if (model.message) {
     refs.message.textContent = model.message;
   }

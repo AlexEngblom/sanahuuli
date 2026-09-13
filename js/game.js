@@ -97,12 +97,6 @@ export function submitWord(state, input) {
   return { result: 'advanced' };
 }
 
-export function giveUp(state) {
-  if (state.status !== 'playing') return { result: 'inactive' };
-  state.status = 'given-up';
-  return { result: 'given-up' };
-}
-
 // Restores saved localStorage progress into a fresh game state.
 export function applyProgress(state, progress) {
   const index = Math.min(
@@ -110,8 +104,8 @@ export function applyProgress(state, progress) {
     state.words.length - 1,
   );
   state.index = index;
-  if (progress?.status === 'won' || progress?.status === 'given-up') {
-    state.status = progress.status;
+  if (progress?.status === 'won') {
+    state.status = 'won';
   }
   return state;
 }

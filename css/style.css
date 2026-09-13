@@ -222,7 +222,13 @@ main {
   color: var(--muted);
 }
 
-/* Rules dialog & errors */
+/* Dialogs & errors */
+
+.dialog-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
 dialog {
   background: #17171f;

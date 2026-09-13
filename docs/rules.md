@@ -8,7 +8,7 @@ Tavoitteesi on muodostaa sanoja, jotka kasvavat kirjaimella pidemmiksi joka rivi
 
 - Näet pelin alussa ensimmäisen sanan ja kaikki käytettävissä olevat kirjaimet.
 - Muodosta seuraava sana käyttämällä **kaikki edellisen sanan kirjaimet ja yksi uusi kirjain**.
-- Peli jatkuu, kunnes saat muodostettua viimeisen sanan tai painat *Lopeta*.
+- Peli jatkuu, kunnes saat muodostettua viimeisen sanan — tai kunnes painat *Lopeta* ja jätät huulen kesken.
 
 ## Sanojen muodostus
 
@@ -25,4 +25,4 @@ Tavoitteesi on muodostaa sanoja, jotka kasvavat kirjaimella pidemmiksi joka rivi
 ## Pelin päättyminen
 
 - **Voitto:** pelaaja muodostaa ketjun viimeisen sanan.
-- **Lopetus:** *Lopeta*-nappi paljastaa ketjun loput sanat.
+- **Lopetus:** *Lopeta*-nappi kysyy, jatkatko myöhemmin. Jos jatkat, eteneminen säilyy; jos et, se unohdetaan. Kumpikin vie takaisin huulilistaukseen — ketju jää sinulta näkemättä.

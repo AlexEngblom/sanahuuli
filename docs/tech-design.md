@@ -59,7 +59,7 @@ Ketjutiedosto (`data/chains/<id>.json`):
 
 - Latauksen yhteydessä "oikea" lisäkirjain per siirtymä johdetaan ketjusta (seuraavan sanan kirjaimet miinus edellisen sanan kirjaimet). Pelaajalle näytettävä **kirjainpankki** on nykyisen sanan kirjaimet + jäljellä olevat lisäkirjaimet — pankin koko pysyy vakiona koko pelin ajan (HS:n Sanajuuren tyyliin). Nykyisen sanan kirjaimet ja jäljellä olevat lisäkirjaimet renderöidään eri tyylein, jotta pelaaja näkee mikä kirjain vie eteenpäin.
 - **Siirron validointi:** syötteen täytyy koostua täsmälleen edellisen sanan kirjaimista plus yhdestä uudesta kirjaimesta. Eteneminen edellyttää, että syöte vastaa ketjun seuraavaa sanaa **anagrammina** (sama kirjainjoukko, ei välttämättä sama merkkijono).
-- **Pelitila:** nykyinen indeksi, tila (`playing` / `won` / `given-up`). Lopetus paljastaa ketjun loput sanat.
+- **Pelitila:** nykyinen indeksi, tila (`playing` / `won`). Lopetus ei ole pelitila vaan poistuminen: peli kysyy säilytetäänkö eteneminen ja palaa listaukseen.
 - Kaikki logiikka on puhdasta ja DOM-vapaata, jotta se on yksikkötestattavissa Nodessa.
 
 ## Tilan säilyvyys (localStorage)

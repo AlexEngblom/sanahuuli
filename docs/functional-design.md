@@ -24,7 +24,7 @@ Yksinkertainen sanapeli polttariviikonloppuun: pelaajat muodostavat sanoja, jotk
 - Sanan lähettäminen:
   - Oikea seuraava sana tai sen anagrammi → etene seuraavalle riville.
   - Kaikki muu → lempeä "ei etene" -palaute; yrittäminen on vapaata (ei elämiä, ei pisteitä).
-- **Lopeta**-nappi: paljastaa ketjun loput sanat.
+- **Lopeta**-nappi: kysyy, haluaako pelaaja palata jatkamaan myöhemmin. Kyllä säilyttää etenemisen, ei tyhjentää sen — molemmissa tapauksissa pelaaja palaa ketjulistaukseen. Ketjua ei koskaan paljasteta.
 - **ⓘ-nappi** yläkulmassa avaa ohjeet modaalina.
 
 **Voitto:**
@@ -38,7 +38,7 @@ Yksinkertainen sanapeli polttariviikonloppuun: pelaajat muodostavat sanoja, jotk
 ## Tilan säilyvyys
 
 - Pelin eteneminen tallentuu automaattisesti localStorageen — sivun saa päivittää tai sulkea kesken pelin.
-- Voiton tai lopetuksen jälkeen voi aloittaa alusta ("Pelaa uudelleen").
+- Voiton jälkeen voi aloittaa alusta ("Pelaa uudelleen").
 
 ## Interaktiovaatimukset
 

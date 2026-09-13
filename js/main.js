@@ -5,7 +5,6 @@ import {
   createGame,
   letterBank,
   submitWord,
-  giveUp,
   applyProgress,
   normalizeWord,
 } from './game.js';
@@ -54,6 +53,10 @@ async function initGamePage() {
     playAgain: document.getElementById('play-again'),
     infoButton: document.getElementById('info-button'),
     dialog: document.getElementById('rules-dialog'),
+    quitDialog: document.getElementById('quit-dialog'),
+    quitKeep: document.getElementById('quit-keep'),
+    quitDiscard: document.getElementById('quit-discard'),
+    quitCancel: document.getElementById('quit-cancel'),
   };
 
   refs.infoButton.addEventListener('click', () => refs.dialog.showModal());
@@ -159,10 +162,19 @@ async function initGamePage() {
     render();
   });
 
-  refs.giveUp.addEventListener('click', () => {
-    giveUp(state);
+  // Quitting never reveals the chain — it asks whether to keep the progress
+  // and returns to the chain list either way.
+  refs.giveUp.addEventListener('click', () => refs.quitDialog.showModal());
+  refs.quitCancel.addEventListener('click', () => refs.quitDialog.close());
+
+  refs.quitKeep.addEventListener('click', () => {
     saveProgress(chainId, state);
-    render();
+    location.href = 'index.html';
+  });
+
+  refs.quitDiscard.addEventListener('click', () => {
+    clearProgress(chainId);
+    location.href = 'index.html';
   });
 
   refs.playAgain.addEventListener('click', reset);
@@ -173,7 +185,7 @@ async function initGamePage() {
   });
 
   document.addEventListener('keydown', (event) => {
-    if (refs.dialog.open || state.status !== 'playing') return;
+    if (refs.dialog.open || refs.quitDialog.open || state.status !== 'playing') return;
     if (event.key === 'Enter') {
       event.preventDefault();
       submit();

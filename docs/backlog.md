@@ -1,7 +1,4 @@
-1. Jos painan Lopeta, niin appi paljastaa koko pelin. Ei näin. Kysytään haluaako pelaaja vielä palata jatkamaan?
--> Jos ei, niin tyhjätään pelin tila muistista
--> Jos kyllä, annetaan pelin tilan olla tallessa
--> Molemmissa tapauksissa viedään pelaaja pelilista-sivulle.
+~~1. Lopeta-nappi~~ — TEHTY: kysyy jatketaanko myöhemmin, ei paljasta ketjua, palaa listaukseen.
 
 2. Alarivin 4 nappia pitäisi kaikki mahtua samalle riville.
 
