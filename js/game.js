@@ -81,6 +81,23 @@ export function letterBank(state) {
   return [...root, ...extra];
 }
 
+// Letters of `previous` that `word` fails to reuse. Counts duplicates, so
+// reusing one A out of two reads as a missing letter — a plain "does the
+// word contain this letter" test would call that word complete.
+export function missingLetters(previous, word) {
+  const available = letterCounts(word);
+  const missing = [];
+  for (const letter of previous) {
+    const left = available.get(letter) ?? 0;
+    if (left === 0) {
+      missing.push(letter);
+    } else {
+      available.set(letter, left - 1);
+    }
+  }
+  return missing;
+}
+
 // Attempt to advance with `input`. Returns { result } where result is
 // 'advanced' | 'won' | 'rejected' | 'empty' | 'inactive'.
 export function submitWord(state, input) {

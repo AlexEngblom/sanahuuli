@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import {
+  missingLetters,
   validateChain,
   createGame,
   submitWord,
@@ -101,6 +102,18 @@ test('applyProgress restores and clamps saved progress', () => {
   // Stale saves from the old give-up flow resume as a normal game.
   applyProgress(fresh, { index: 1, status: 'given-up' });
   assert.equal(fresh.status, 'playing');
+});
+
+test('missingLetters counts duplicates, not just presence', () => {
+  // Reachable in huuli-1: on the ANEMIA row the player uses one A and both
+  // M tiles. Every letter of ANEMIA appears in the word, but one A is gone.
+  assert.deepEqual(missingLetters('ANEMIA', 'ANEMIUM'), ['A']);
+  // A dropped unique letter was already reported correctly.
+  assert.deepEqual(missingLetters('ANEMIA', 'AAEMIUM'), ['N']);
+  // Reusing every letter, in any order, leaves nothing missing.
+  assert.deepEqual(missingLetters('ANEMIA', 'AINEUMA'), []);
+  assert.deepEqual(missingLetters('AIE', 'AIET'), []);
+  assert.deepEqual(missingLetters('ÄLÄ', 'ALAS'), ['Ä', 'Ä']);
 });
 
 test('all chains shipped in the repo are valid', async () => {
