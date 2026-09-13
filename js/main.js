@@ -115,7 +115,7 @@ async function initGamePage() {
       message = '';
       rebuildBank();
     } else if (result === 'rejected') {
-      // Erottele "puuttuvat kirjaimet" ja "väärä sana".
+      // Tell "you dropped a letter" apart from "wrong combination".
       const prev = state.words[state.index];
       const missing = [...prev].filter((l) => !word.includes(l));
       message = missing.length > 0
@@ -203,7 +203,7 @@ async function initGamePage() {
       if (tileId !== undefined) {
         input.push(tileId);
         message = '';
-        // HS-style: the word submits automatically once the row is full.
+        // The word submits automatically once the row is full.
         if (input.length === state.words[state.index + 1].length) {
           submit();
         } else {

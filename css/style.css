@@ -127,7 +127,8 @@ main {
   border-radius: 6px;
   background: transparent;
   color: var(--fg);
-  /* Ratio matched to HS: a 24px letter in a 38px box. */
+  /* Letters fill most of the box: at the smallest box the game allows,
+     this still lands on a comfortably readable 23px. */
   font-size: calc(var(--box) * 0.62);
   font-weight: 700;
   padding: 0;
