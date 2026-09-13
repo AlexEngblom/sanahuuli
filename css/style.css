@@ -100,8 +100,8 @@ main {
   width: 100%;
   container-type: inline-size;
   --cols: 8;
-  --box-gap: 5px;
-  --box: min(44px, (100cqw - (var(--cols) - 1) * var(--box-gap)) / var(--cols));
+  --box-gap: 4px;
+  --box: min(52px, (100cqw - (var(--cols) - 1) * var(--box-gap)) / var(--cols));
 }
 
 .row {
@@ -109,19 +109,28 @@ main {
   gap: var(--box-gap);
 }
 
+/* Capitals never use the descender space the line box reserves for them,
+   so plain centring leaves the letter sitting high. text-box trims the line
+   box to the cap height and baseline, making the letter itself what gets
+   centred.
+
+   text-box-trim only applies to block containers, so display:flex here
+   would silently disable it — which is exactly why these boxes looked worse
+   than the bank tiles, which never had a display of their own. Don't
+   reintroduce flex. */
 .box {
   width: var(--box);
   height: var(--box);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border: 1px solid var(--box-border);
   border-radius: 6px;
   background: transparent;
   color: var(--fg);
-  font-size: calc(var(--box) * 0.55);
+  /* Ratio matched to HS: a 24px letter in a 38px box. */
+  font-size: calc(var(--box) * 0.62);
   font-weight: 700;
   padding: 0;
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
 }
 
 .box.filled {
@@ -148,23 +157,33 @@ main {
 
 /* Letter bank */
 
+/* Tiles are the game's touch targets, so they stay comfortably tappable
+   and are capped at a fixed size; the min() only kicks in on a viewport
+   narrower than any real phone. Auto tracks let the tile size alone decide
+   the grid's width, so justify-content centers it. */
 .bank {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  max-width: 20rem;
+  grid-template-columns: repeat(4, auto);
+  justify-content: center;
+  gap: var(--bank-gap);
+  width: 100%;
+  container-type: inline-size;
+  --bank-gap: 8px;
+  --tile-size: min(48px, (100cqw - 3 * var(--bank-gap)) / 4);
 }
 
 /* Default tile: untouched extra letter (grey). */
 .tile {
-  width: 56px;
-  height: 56px;
+  width: var(--tile-size);
+  height: var(--tile-size);
   border: none;
   border-radius: 10px;
   background: var(--tile-used);
   color: var(--muted);
-  font-size: 1.5rem;
+  font-size: calc(var(--tile-size) * 0.5);
   font-weight: 700;
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
   cursor: pointer;
 }
 
