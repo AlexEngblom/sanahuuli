@@ -6,6 +6,7 @@ import { launchConfetti } from './confetti.js';
 import {
   createGame,
   letterBank,
+  keepBankOrder,
   submitWord,
   applyProgress,
   missingLetters,
@@ -113,9 +114,14 @@ async function initGamePage() {
   // True from the moment the last word lands until a new game starts.
   let celebrating = false;
 
-  function rebuildBank() {
+  // A new game shuffles the bank; solving a row keeps every letter in its
+  // place, so the player's eye doesn't have to find them all over again.
+  function rebuildBank({ keepOrder = false } = {}) {
+    const previousLetters = keepOrder ? order.map((id) => tiles[id].letter) : null;
     tiles = letterBank(state).map((tile, id) => ({ id, ...tile }));
-    order = shuffled(tiles.map((tile) => tile.id));
+    order = previousLetters
+      ? keepBankOrder(previousLetters, tiles)
+      : shuffled(tiles.map((tile) => tile.id));
     input = [];
   }
 
@@ -138,7 +144,7 @@ async function initGamePage() {
     if (result === 'advanced' || result === 'won') {
       saveProgress(chainId, state);
       message = '';
-      rebuildBank();
+      rebuildBank({ keepOrder: true });
       if (result === 'won') {
         celebrating = true;
         // Confetti lands as the reveal reaches the final word (0.3 s per row).

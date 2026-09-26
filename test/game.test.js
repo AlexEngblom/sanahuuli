@@ -14,6 +14,7 @@ import {
   letterBank,
   currentWord,
   remainingAddedLetters,
+  keepBankOrder,
 } from '../js/game.js';
 
 const HUULI_1 = ['AIE', 'AINE', 'ANIME', 'ANEMIA', 'AINEUMA', 'IMEMUNAA'];
@@ -217,4 +218,23 @@ test('all chains shipped in the repo are valid', async () => {
     // createGame validates the words and any curated alternatives together.
     assert.doesNotThrow(() => createGame(chain), `invalid chain: ${entry.id}`);
   }
+});
+
+test('solving a row keeps every bank letter in its place', () => {
+  const state = createGame({ words: ['ILO', 'OLKI', 'KILOT'] });
+  // The player sees the bank in some shuffled order.
+  const before = letterBank(state);
+  const shownLetters = [2, 4, 0, 3, 1].map((id) => before[id].letter);
+  submitWord(state, 'OLKI');
+  const after = letterBank(state);
+  const order = keepBankOrder(shownLetters, after);
+  assert.deepEqual(order.map((id) => after[id].letter), shownLetters);
+  // K moved from 'extra' to 'root', but it kept its spot.
+  const kSpot = shownLetters.indexOf('K');
+  assert.equal(after[order[kSpot]].type, 'root');
+});
+
+test('keepBankOrder never drops a tile', () => {
+  const tiles = [{ letter: 'A' }, { letter: 'B' }, { letter: 'C' }];
+  assert.deepEqual(keepBankOrder(['C', 'X', 'A'], tiles), [2, 0, 1]);
 });

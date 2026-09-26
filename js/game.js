@@ -135,6 +135,23 @@ export function letterBank(state) {
   return [...root, ...extra];
 }
 
+// Display order for a freshly built bank that keeps every letter where it
+// was. The bank always holds the final word's letters — solving a row only
+// moves the added letter from 'extra' to 'root' — so each position can be
+// given a tile with the same letter as before. `previousLetters` is the old
+// bank in display order; the result is tile indexes into `tiles`. Tiles
+// left over (only if the letters differ, which the chain never allows) go
+// last so no tile is ever lost.
+export function keepBankOrder(previousLetters, tiles) {
+  const free = tiles.map((_, id) => id);
+  const order = [];
+  for (const letter of previousLetters) {
+    const at = free.findIndex((id) => tiles[id].letter === letter);
+    if (at !== -1) order.push(...free.splice(at, 1));
+  }
+  return [...order, ...free];
+}
+
 // Letters of `previous` that `word` fails to reuse. Counts duplicates, so
 // reusing one A out of two reads as a missing letter — a plain "does the
 // word contain this letter" test would call that word complete.
