@@ -1,0 +1,6 @@
+{
+  "id": "huuli-5",
+  "name": "Sanahuuli #5",
+  "words": ["APU", "RAPU", "KRAPU", "PARKUA", "KRAPULA", "KALURAPU"],
+  "alternatives": { "KRAPU": ["PARKU"], "PARKUA": ["PURKAA"], "KALURAPU": ["RAPUKALU"] }
+}

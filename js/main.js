@@ -8,6 +8,7 @@ import {
   applyProgress,
   missingLetters,
   normalizeWord,
+  currentWord,
 } from './game.js';
 import { loadProgress, saveProgress, clearProgress } from './storage.js';
 import { renderList, renderError, renderGame } from './ui.js';
@@ -117,7 +118,7 @@ async function initGamePage() {
       rebuildBank();
     } else if (result === 'rejected') {
       // Tell "you dropped a letter" apart from "wrong combination".
-      const missing = missingLetters(state.words[state.index], word);
+      const missing = missingLetters(currentWord(state), word);
       message = missing.length > 0
         ? 'Sinun täytyy käyttää kaikki samat kirjaimet kuin edellisessä sanassa'
         : 'Ei etene — kokeile toista kirjainyhdistelmää.';

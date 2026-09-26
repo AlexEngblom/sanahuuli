@@ -1,0 +1,6 @@
+{
+  "id": "huuli-7",
+  "name": "Sanahuuli #7",
+  "words": ["KAI", "KITA", "AKTIO", "KATODI", "KADOTTI", "DIKTATOR"],
+  "alternatives": { "KITA": ["AKTI"], "AKTIO": ["KOTIA"] }
+}

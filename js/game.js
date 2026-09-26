@@ -36,6 +36,13 @@ export function addedLetter(previous, next) {
   return null;
 }
 
+// Is `next` exactly `previous` plus one letter, in any order? The chain's own
+// steps and every curated alternative have to pass this.
+export function followsFrom(previous, next) {
+  const letter = addedLetter(previous, next);
+  return letter !== null && isAnagram(previous + letter, next);
+}
+
 // Validates a word chain and returns normalized words + the added letter
 // of each step. Throws on any invalid step — chain data is curated, so a
 // broken chain is a bug we want to fail fast on.
@@ -48,13 +55,12 @@ export function validateChain(words) {
   for (let i = 1; i < normalized.length; i++) {
     const previous = normalized[i - 1];
     const next = normalized[i];
-    const letter = addedLetter(previous, next);
-    if (letter === null || !isAnagram(previous + letter, next)) {
+    if (!followsFrom(previous, next)) {
       throw new Error(
         `Invalid chain step ${i}: "${next}" is not "${previous}" plus one letter`,
       );
     }
-    addedLetters.push(letter);
+    addedLetters.push(addedLetter(previous, next));
   }
   return { words: normalized, addedLetters };
 }
@@ -63,6 +69,12 @@ export function validateChain(words) {
 // There is no dictionary, so the data is the only thing that can say which
 // other real words are allowed — ILO + K is OLKI in the chain, but KILO is
 // just as valid a word and has to be listed to be accepted.
+//
+// An alternative does not have to be an anagram of the chain's word: PARVI is
+// RAVI + P and ARVIO is RAVI + O, and POVARI follows from either. What it must
+// do is keep the chain intact, so every accepted spelling of a row has to
+// follow every accepted spelling of the row above it — otherwise one branch
+// would strand the player on the next row.
 export function normalizeAlternatives(alternatives, words) {
   const byWord = new Map();
   for (const [word, spellings] of Object.entries(alternatives ?? {})) {
@@ -70,13 +82,17 @@ export function normalizeAlternatives(alternatives, words) {
     if (!words.includes(canonical)) {
       throw new Error(`Alternatives listed for "${canonical}", which is not in the chain`);
     }
-    const normalized = spellings.map(normalizeWord);
-    for (const spelling of normalized) {
-      if (!isAnagram(spelling, canonical)) {
-        throw new Error(`Alternative "${spelling}" is not an anagram of "${canonical}"`);
+    byWord.set(canonical, spellings.map(normalizeWord));
+  }
+  const accepted = (rowIndex) => [words[rowIndex], ...(byWord.get(words[rowIndex]) ?? [])];
+  for (let i = 1; i < words.length; i++) {
+    for (const previous of accepted(i - 1)) {
+      for (const spelling of accepted(i)) {
+        if (!followsFrom(previous, spelling)) {
+          throw new Error(`Alternative "${spelling}" is not "${previous}" plus one letter`);
+        }
       }
     }
-    byWord.set(canonical, normalized);
   }
   return byWord;
 }
@@ -97,12 +113,17 @@ export function isAcceptedSpelling(state, target, word) {
   return word === target || (state.alternatives?.get(target) ?? []).includes(word);
 }
 
+// What is actually on the current row: the player's own spelling when they
+// solved it with an alternative, otherwise the chain's word.
 export function currentWord(state) {
-  return state.words[state.index];
+  return state.spellings[state.index] ?? state.words[state.index];
 }
 
+// Letters still to come. Derived from the last word rather than the chain's
+// own steps, so a player who took an alternative branch sees the right bank —
+// the letters of the final word never depend on the route taken there.
 export function remainingAddedLetters(state) {
-  return state.addedLetters.slice(state.index);
+  return missingLetters(state.words[state.words.length - 1], currentWord(state));
 }
 
 // Letter bank shown to the player: current word's letters (type 'root')

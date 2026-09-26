@@ -1,0 +1,6 @@
+{
+  "id": "huuli-2",
+  "name": "Sanahuuli #2",
+  "words": ["ASU", "ALUS", "LAUSE", "SANELU", "ALENNUS", "SULHANEN"],
+  "alternatives": { "ALUS": ["SULA"], "LAUSE": ["SEULA"] }
+}

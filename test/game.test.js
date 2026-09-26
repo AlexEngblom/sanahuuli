@@ -13,6 +13,7 @@ import {
   addedLetter,
   letterBank,
   currentWord,
+  remainingAddedLetters,
 } from '../js/game.js';
 
 const HUULI_1 = ['AIE', 'AINE', 'ANIME', 'ANEMIA', 'AINEUMA', 'IMEMUNAA'];
@@ -84,10 +85,33 @@ test('curated alternative spellings advance', () => {
   assert.equal(submitWord(state, 'KILO').result, 'won');
 });
 
+// RAVI + P is PARVI and RAVI + O is ARVIO. They are not anagrams of each
+// other, but POVARI follows from either one, so both may stand on that row.
+test('an alternative may add a different letter than the chain does', () => {
+  const state = createGame({
+    words: ['RAVI', 'PARVI', 'POVARI'],
+    alternatives: { PARVI: ['ARVIO'] },
+  });
+  assert.equal(submitWord(state, 'ARVIO').result, 'advanced');
+  assert.equal(currentWord(state), 'ARVIO');
+  // The bank follows the branch the player took: P is what is still missing.
+  assert.deepEqual(remainingAddedLetters(state), ['P']);
+  assert.equal(submitWord(state, 'POVARI').result, 'won');
+});
+
+test('an alternative that strands the next row is rejected', () => {
+  // VARIS is RAVI + S, but POVARI is not VARIS plus one letter — a player who
+  // wrote VARIS could never finish the chain.
+  assert.throws(
+    () => normalizeAlternatives({ PARVI: ['VARIS'] }, ['RAVI', 'PARVI', 'POVARI']),
+    /plus one letter/,
+  );
+});
+
 test('normalizeAlternatives rejects miscurated data', () => {
   const words = ['ILO', 'OLKI'];
-  // An alternative has to be an anagram of the word it stands in for.
-  assert.throws(() => normalizeAlternatives({ OLKI: ['OLKA'] }, words), /not an anagram/);
+  // An alternative has to continue the chain: the row above plus one letter.
+  assert.throws(() => normalizeAlternatives({ OLKI: ['OLKA'] }, words), /plus one letter/);
   // ...and it has to belong to a word that is actually in the chain.
   assert.throws(() => normalizeAlternatives({ KISSA: ['SIKAS'] }, words), /not in the chain/);
   // Case is normalized on the way in, like the chain itself.

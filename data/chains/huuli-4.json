@@ -1,0 +1,6 @@
+{
+  "id": "huuli-4",
+  "name": "Sanahuuli #4",
+  "words": ["IVA", "RAVI", "PARVI", "POVARI", "AVOPARI", "AVIOPARI"],
+  "alternatives": { "PARVI": ["ARVIO"], "POVARI": ["VIRPOA"] }
+}
