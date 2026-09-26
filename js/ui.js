@@ -45,6 +45,9 @@ export function renderGame(refs, model) {
   const playing = model.state.status === 'playing';
   // Drives the rainbow celebration in the stylesheet.
   refs.root.classList.toggle('won', model.state.status === 'won');
+  // Only the moment of winning gets the row reveal; a won game opened
+  // later just shows the rainbow.
+  refs.root.classList.toggle('celebrating', Boolean(model.celebrating));
   refs.giveUp.hidden = !playing;
   refs.clear.hidden = !playing;
   refs.shuffle.hidden = !playing;
@@ -71,6 +74,8 @@ function renderPyramid(pyramid, { state, inputLetters }) {
   const rows = state.words.map((word, rowIndex) => {
     const row = document.createElement('div');
     row.className = 'row';
+    // Order of the win reveal: rows light up in chain order.
+    row.style.setProperty('--row', String(rowIndex));
 
     // Solved rows (including the revealed starting word) are filled, the
     // next row shows the in-progress input, future rows stay empty.

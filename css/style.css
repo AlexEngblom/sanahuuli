@@ -274,9 +274,70 @@ body[data-page="list"] .message {
   cursor: default;
 }
 
+/* The moment of winning: rows light up one by one in chain order, then
+   the final word flashes. The reveal is the entrance here, so the boxes
+   skip their pop and only run the rainbow. */
+@keyframes row-in {
+  from { opacity: 0; transform: translateY(-10px) scale(0.9); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes final-flash {
+  0%, 100% { filter: none; transform: scale(1); }
+  50% { filter: brightness(1.5) drop-shadow(0 0 14px #fff); transform: scale(1.08); }
+}
+
+.won.celebrating .box.filled,
+.won.celebrating .tile {
+  animation: rainbow-run 2.4s linear infinite;
+  animation-delay: calc(var(--wave, 0) * -0.15s);
+}
+
+.celebrating .row {
+  animation: row-in 0.45s ease-out both;
+  animation-delay: calc(var(--row, 0) * 0.3s);
+}
+
+.celebrating .row:last-child {
+  animation:
+    row-in 0.45s ease-out both,
+    final-flash 0.8s ease-in-out 2;
+  animation-delay:
+    calc(var(--row, 0) * 0.3s),
+    calc(var(--row, 0) * 0.3s + 0.45s);
+}
+
+/* Confetti layer: fixed over the page, never in the way of a tap. */
+.confetti {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.confetti span {
+  position: absolute;
+  top: -5vh;
+  border-radius: 2px;
+  animation-name: confetti-fall;
+  animation-timing-function: cubic-bezier(0.3, 0.1, 0.7, 1);
+  animation-fill-mode: both;
+}
+
+@keyframes confetti-fall {
+  to { transform: translate(var(--drift, 0), 110vh) rotate(var(--spin, 360deg)); }
+}
+
+/* Same selectors as the animated rules above, so none of them outweighs
+   this block. */
 @media (prefers-reduced-motion: reduce) {
   .won .box.filled,
-  .won .tile {
+  .won .tile,
+  .won.celebrating .box.filled,
+  .won.celebrating .tile,
+  .celebrating .row,
+  .celebrating .row:last-child {
     animation: none;
   }
 }

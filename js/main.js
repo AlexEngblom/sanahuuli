@@ -2,6 +2,7 @@
 
 import { fetchManifest, fetchChain, fetchHints } from './chains.js';
 import { createHints, nextHint } from './hints.js';
+import { launchConfetti } from './confetti.js';
 import {
   createGame,
   letterBank,
@@ -109,6 +110,8 @@ async function initGamePage() {
   let input = [];
   // Resumed games skip the hint — the player has already seen it.
   let message = state.index === 0 && state.status === 'playing' ? START_HINT : '';
+  // True from the moment the last word lands until a new game starts.
+  let celebrating = false;
 
   function rebuildBank() {
     tiles = letterBank(state).map((tile, id) => ({ id, ...tile }));
@@ -124,6 +127,7 @@ async function initGamePage() {
       order,
       input,
       message,
+      celebrating,
     });
   }
 
@@ -135,6 +139,11 @@ async function initGamePage() {
       saveProgress(chainId, state);
       message = '';
       rebuildBank();
+      if (result === 'won') {
+        celebrating = true;
+        // Confetti lands as the reveal reaches the final word (0.3 s per row).
+        setTimeout(launchConfetti, state.words.length * 300);
+      }
     } else if (result === 'rejected') {
       // Tell "you dropped a letter" apart from "wrong combination".
       const missing = missingLetters(currentWord(state), word);
@@ -150,6 +159,7 @@ async function initGamePage() {
     clearProgress(chainId);
     state = createGame(chain);
     startHints();
+    celebrating = false;
     message = START_HINT;
     rebuildBank();
     render();
