@@ -43,6 +43,8 @@ export function renderGame(refs, model) {
   renderBank(refs.bank, model);
 
   const playing = model.state.status === 'playing';
+  // Drives the rainbow celebration in the stylesheet.
+  refs.root.classList.toggle('won', model.state.status === 'won');
   refs.giveUp.hidden = !playing;
   refs.clear.hidden = !playing;
   refs.shuffle.hidden = !playing;
@@ -85,6 +87,9 @@ function renderPyramid(pyramid, { state, inputLetters }) {
       box.type = 'button';
       box.className = 'box';
       box.tabIndex = -1;
+      // Diagonal position: the win animation's color wave runs corner to
+      // corner across the whole pyramid by delaying each box by this much.
+      box.style.setProperty('--wave', String(rowIndex + i));
       const letter = letters[i];
       if (letter) {
         box.textContent = letter;
@@ -123,6 +128,8 @@ function renderBank(bank, { tiles, order, input, state }) {
     }
     button.textContent = tile.letter;
     button.dataset.tileId = String(tileId);
+    // Bank tiles join the win animation's color wave in their grid order.
+    button.style.setProperty('--wave', String(order.indexOf(tileId)));
     // Picked tiles stay enabled: tapping one takes the letter back.
     button.disabled = !playing;
     return button;
