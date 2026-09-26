@@ -12,12 +12,12 @@
   {
     "id": "huuli-3",
     "name": "Sanahuuli #3",
-    "description": "Viimeiset hetket vapaana."
+    "description": "Villi ja vapaa."
   },
   {
     "id": "huuli-4",
     "name": "Sanahuuli #4",
-    "description": "Yksi kirjain erottaa."
+    "description": "Pienestä se on kiinni."
   },
   {
     "id": "huuli-5",
@@ -27,16 +27,16 @@
   {
     "id": "huuli-6",
     "name": "Sanahuuli #6",
-    "description": "Päivän sankarille."
+    "description": "Sankareiden johtava mestari."
   },
   {
     "id": "huuli-7",
     "name": "Sanahuuli #7",
-    "description": "Kuka täällä määrää."
+    "description": "Ei ihmistä, ei ongelmaa."
   },
   {
     "id": "huuli-8",
     "name": "Sanahuuli #8",
-    "description": "Loppuillan sanastoa."
+    "description": "Kielletyt huvit."
   }
 ]
