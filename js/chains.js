@@ -9,6 +9,17 @@ export async function fetchManifest() {
   return response.json();
 }
 
+// Hint lines are optional flavor: a missing or broken file must never stop
+// the game from loading, so failures come back as no hints.
+export async function fetchHints() {
+  try {
+    const response = await fetch('data/hints.json');
+    return response.ok ? await response.json() : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function fetchChain(id) {
   const response = await fetch(`data/chains/${encodeURIComponent(id)}.json`);
   if (!response.ok) {

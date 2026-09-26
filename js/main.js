@@ -1,6 +1,7 @@
 // Page bootstrap and event wiring. Dispatches on <body data-page>.
 
-import { fetchManifest, fetchChain } from './chains.js';
+import { fetchManifest, fetchChain, fetchHints } from './chains.js';
+import { createHints, nextHint } from './hints.js';
 import {
   createGame,
   letterBank,
@@ -10,7 +11,13 @@ import {
   normalizeWord,
   currentWord,
 } from './game.js';
-import { loadProgress, saveProgress, clearProgress } from './storage.js';
+import {
+  loadProgress,
+  saveProgress,
+  clearProgress,
+  loadHintTurn,
+  saveHintTurn,
+} from './storage.js';
 import { renderList, renderError, renderGame } from './ui.js';
 
 const page = document.body.dataset.page;
@@ -74,6 +81,7 @@ async function initGamePage() {
   }
 
   let chain;
+  const hintGroups = fetchHints();
   try {
     chain = await fetchChain(chainId);
   } catch {
@@ -83,6 +91,16 @@ async function initGamePage() {
 
   let state = createGame(chain);
   applyProgress(state, loadProgress(chainId));
+  // Every game started — opened, resumed or played again — takes the next
+  // hint group in turn.
+  const groups = await hintGroups;
+  let hints;
+  function startHints() {
+    const turn = loadHintTurn();
+    hints = createHints(groups, turn);
+    if (hints.groupCount > 0) saveHintTurn((turn + 1) % hints.groupCount);
+  }
+  startHints();
 
   // Bank tiles have stable ids that survive shuffles; `order` is the
   // shuffled display order of tile ids, `input` the picked tile ids.
@@ -131,6 +149,7 @@ async function initGamePage() {
   function reset() {
     clearProgress(chainId);
     state = createGame(chain);
+    startHints();
     message = START_HINT;
     rebuildBank();
     render();
@@ -200,7 +219,7 @@ async function initGamePage() {
   });
 
   refs.hint.addEventListener('click', () => {
-    message = 'Mikä on kun ei taidot riitä?';
+    message = nextHint(hints);
     render();
   });
 

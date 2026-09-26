@@ -33,3 +33,23 @@ export function clearProgress(chainId) {
     // Storage unavailable — nothing to clear.
   }
 }
+
+// Which hint group the next game gets. Shared by all chains, so every new
+// game — whichever chain it is — moves on to the next group.
+const HINT_TURN_KEY = 'sanahuuli:hint-turn';
+
+export function loadHintTurn() {
+  try {
+    return Number(localStorage.getItem(HINT_TURN_KEY)) || 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function saveHintTurn(turn) {
+  try {
+    localStorage.setItem(HINT_TURN_KEY, String(turn));
+  } catch {
+    // Storage unavailable — every game starts from the first group.
+  }
+}

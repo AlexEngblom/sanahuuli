@@ -96,6 +96,6 @@ Nämä kolme ratkaisua eivät ole ilmeisiä koodia lukemalla, ja kaksi ensimmäi
 - Sanasto- / oikolukutarkistus. Korvike on ketjudatan `alternatives`-kenttä.
 - Sanaketjujen generaattori
 - Käyttäjien luomat ketjut (vaatii persistointia — shelvattu; mahdollisia tulevia vaihtoehtoja: JSON leikepöydälle/lataukseen PR:ää varten, tai URL-koodatut ketjut)
-- Oikeat vihjeet, pisteet, ajastin, tunnistautuminen. Käyttöliittymässä on Vihje-nappi, mutta se tulostaa vain vitsirivin.
+- Oikeat vihjeet, pisteet, ajastin, tunnistautuminen. Käyttöliittymässä on Vihje-nappi, mutta se näyttää vain laulun säkeitä (`data/hints.json`, logiikka `js/hints.js`).
 - **Kirjainpankin järjestyksen säilyttäminen sivun päivityksessä.** Tämä toteutettiin kerran (järjestys localStorageen etenemisen mukana, `isValidTileOrder`) ja peruttiin tietoisesti: laattojen sekoittuminen päivityksessä ei osoittautunut ongelmaksi, eikä lisätty tila ollut sen arvoista. Älä tee uudelleen ilman uutta perustetta.
 - Kesken olevan rivin säilyttäminen sivun päivityksessä.
