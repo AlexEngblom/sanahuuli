@@ -56,6 +56,7 @@ async function initGamePage() {
     shuffle: document.getElementById('shuffle'),
     hint: document.getElementById('hint'),
     playAgain: document.getElementById('play-again'),
+    chooseChain: document.getElementById('choose-chain'),
     infoButton: document.getElementById('info-button'),
     dialog: document.getElementById('rules-dialog'),
     quitDialog: document.getElementById('quit-dialog'),
@@ -194,6 +195,9 @@ async function initGamePage() {
   });
 
   refs.playAgain.addEventListener('click', reset);
+  refs.chooseChain.addEventListener('click', () => {
+    location.href = 'index.html';
+  });
 
   refs.hint.addEventListener('click', () => {
     message = 'Mikä on kun ei taidot riitä?';

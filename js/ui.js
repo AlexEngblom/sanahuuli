@@ -48,6 +48,7 @@ export function renderGame(refs, model) {
   refs.shuffle.hidden = !playing;
   refs.hint.hidden = !playing;
   refs.playAgain.hidden = playing;
+  refs.chooseChain.hidden = playing;
 
   if (model.state.status === 'won') {
     refs.message.textContent = 'Huuli huulteltu! 🎉';
