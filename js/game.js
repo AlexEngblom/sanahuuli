@@ -138,16 +138,27 @@ export function letterBank(state) {
 // Display order for a freshly built bank that keeps every letter where it
 // was. The bank always holds the final word's letters — solving a row only
 // moves the added letter from 'extra' to 'root' — so each position can be
-// given a tile with the same letter as before. `previousLetters` is the old
-// bank in display order; the result is tile indexes into `tiles`. Tiles
-// left over (only if the letters differ, which the chain never allows) go
-// last so no tile is ever lost.
-export function keepBankOrder(previousLetters, tiles) {
+// given a tile with the same letter as before.
+//
+// `previous` is the old bank in display order as { letter, type }, where
+// type is what that position should become: 'root' for the tiles the player
+// just spelled the word with, 'extra' for the rest. With a repeated letter
+// (IMEMUNAA has two Ms) this puts the lilac M on the spot the player picked,
+// not on whichever M comes first. The result is tile indexes into `tiles`;
+// tiles left over (only if the letters differ, which the chain never
+// allows) go last so no tile is ever lost.
+export function keepBankOrder(previous, tiles) {
   const free = tiles.map((_, id) => id);
+  const take = (test) => {
+    const at = free.findIndex(test);
+    return at === -1 ? null : free.splice(at, 1)[0];
+  };
   const order = [];
-  for (const letter of previousLetters) {
-    const at = free.findIndex((id) => tiles[id].letter === letter);
-    if (at !== -1) order.push(...free.splice(at, 1));
+  for (const { letter, type } of previous) {
+    const id =
+      take((id) => tiles[id].letter === letter && tiles[id].type === type) ??
+      take((id) => tiles[id].letter === letter);
+    if (id !== null) order.push(id);
   }
   return [...order, ...free];
 }

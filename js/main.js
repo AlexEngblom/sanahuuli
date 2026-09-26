@@ -117,10 +117,14 @@ async function initGamePage() {
   // A new game shuffles the bank; solving a row keeps every letter in its
   // place, so the player's eye doesn't have to find them all over again.
   function rebuildBank({ keepOrder = false } = {}) {
-    const previousLetters = keepOrder ? order.map((id) => tiles[id].letter) : null;
+    // The tiles the player just spelled the word with become its root
+    // letters, right where they were picked.
+    const previous = keepOrder
+      ? order.map((id) => ({ letter: tiles[id].letter, type: input.includes(id) ? 'root' : 'extra' }))
+      : null;
     tiles = letterBank(state).map((tile, id) => ({ id, ...tile }));
-    order = previousLetters
-      ? keepBankOrder(previousLetters, tiles)
+    order = previous
+      ? keepBankOrder(previous, tiles)
       : shuffled(tiles.map((tile) => tile.id));
     input = [];
   }

@@ -222,19 +222,43 @@ test('all chains shipped in the repo are valid', async () => {
 
 test('solving a row keeps every bank letter in its place', () => {
   const state = createGame({ words: ['ILO', 'OLKI', 'KILOT'] });
-  // The player sees the bank in some shuffled order.
+  // The player sees the bank in some shuffled order and spells OLKI.
   const before = letterBank(state);
-  const shownLetters = [2, 4, 0, 3, 1].map((id) => before[id].letter);
+  const shown = [2, 4, 0, 3, 1];
+  const used = shown.filter((id) => before[id].letter !== 'T');
   submitWord(state, 'OLKI');
   const after = letterBank(state);
-  const order = keepBankOrder(shownLetters, after);
-  assert.deepEqual(order.map((id) => after[id].letter), shownLetters);
-  // K moved from 'extra' to 'root', but it kept its spot.
-  const kSpot = shownLetters.indexOf('K');
-  assert.equal(after[order[kSpot]].type, 'root');
+  const order = keepBankOrder(
+    shown.map((id) => ({ letter: before[id].letter, type: used.includes(id) ? 'root' : 'extra' })),
+    after,
+  );
+  assert.deepEqual(order.map((id) => after[id].letter), shown.map((id) => before[id].letter));
+  assert.deepEqual(order.map((id) => after[id].type), shown.map((id) => (used.includes(id) ? 'root' : 'extra')));
+});
+
+// Huuli-1: AINE + M is ANIME, and IMEMUNAA has two Ms. The M the player
+// picked must be the one that turns lilac, not the first M in the bank.
+test('with a repeated letter the picked tile is the one that becomes root', () => {
+  const state = createGame({ words: ['AIE', 'AINE', 'ANIME', 'ANEMIA', 'AINEUMA', 'IMEMUNAA'] });
+  submitWord(state, 'AINE');
+  const before = letterBank(state);
+  const mIds = before.map((tile, id) => (tile.letter === 'M' ? id : null)).filter((id) => id !== null);
+  // Display order puts the M the player does NOT use first.
+  const shown = [mIds[0], ...before.map((_, id) => id).filter((id) => id !== mIds[0])];
+  const picked = new Set(before.map((tile, id) => (tile.type === 'root' ? id : null)).filter((id) => id !== null));
+  picked.add(mIds[1]);
+  submitWord(state, 'ANIME');
+  const after = letterBank(state);
+  const order = keepBankOrder(
+    shown.map((id) => ({ letter: before[id].letter, type: picked.has(id) ? 'root' : 'extra' })),
+    after,
+  );
+  assert.equal(after[order[0]].type, 'extra'); // the unused M stays grey
+  assert.equal(after[order[shown.indexOf(mIds[1])]].type, 'root'); // the picked M turns lilac
 });
 
 test('keepBankOrder never drops a tile', () => {
-  const tiles = [{ letter: 'A' }, { letter: 'B' }, { letter: 'C' }];
-  assert.deepEqual(keepBankOrder(['C', 'X', 'A'], tiles), [2, 0, 1]);
+  const tiles = [{ letter: 'A', type: 'root' }, { letter: 'B', type: 'root' }, { letter: 'C', type: 'extra' }];
+  const order = keepBankOrder([{ letter: 'C', type: 'extra' }, { letter: 'X', type: 'root' }, { letter: 'A', type: 'root' }], tiles);
+  assert.deepEqual(order, [2, 0, 1]);
 });
